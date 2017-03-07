@@ -1,0 +1,47 @@
+
+Paddy's Refactoring Take-Home
+
+Version controls fors a part of the mark for the pr
+
+midnight, this day week
+
+How to maintain the functionality so that it'll still run after you finish with it. 
+
+There isn't really a right answer, there are things you can look for, being able to analyse the code, if there are situations where you can refactor and implementation of same.  
+
+Quality of documentation is important, all changes recorded in your repository. 
+
+End of the lecture notes has good
+
+https://sourcemaking.com/refactoring
+
+Look at changes to 
+
+He's not looking f
+
+Not so much looking for patterns, refactoring can use patterns. Applying patterns would be 
+
+Not looking for patterns... Look at the catalogue of refactorings and use those. (Next assignment will be more pattern-heavy)
+
+Documenting changes - description, justification, end result and link to repository, everything you're doing you have to do in the repository. Providing a copy, any Github you're using, do not delete until June because the external examiner may want to look at them. 
+
+Duplicated code, stuff better in one class than another. May end up with more classes.
+
+
+His note on...
+
+Apply refactoring to a set of classes representing an implementation of a personnel system using Swing, making use of JUnit for unit testing where necessary and Git for version control.
+
+Document the refactorings that you apply to the code, justifying the use of each refactoring.
+
+Submit:
+
+	the refactored classes
+	
+	the report describing the refactorings applied
+	
+	a repository showing the progress made during refactoring
+
+Deadline: Friday 3rd March, midnight.
+
+Weighting: 10% of overall mark.
