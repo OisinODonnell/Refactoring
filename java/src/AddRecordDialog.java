@@ -26,9 +26,9 @@ public class AddRecordDialog extends JDialog implements ActionListener {
 	JTextField idField, ppsField, surnameField, firstNameField, salaryField;
 	JComboBox<String> genderCombo, departmentCombo, fullTimeCombo;
 	JButton save, cancel;
-	EmployeeDetails parent;
+	ApplicationView parent;
 	// constructor for add record dialog
-	public AddRecordDialog(EmployeeDetails parent) {
+	public AddRecordDialog(ApplicationView parent) {
 		setTitle("Add Record");
 		setModal(true);
 		this.parent = parent;

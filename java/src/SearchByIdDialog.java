@@ -22,11 +22,11 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
 public class SearchByIdDialog extends JDialog implements ActionListener {
-	EmployeeDetails parent;
+	ApplicationView parent;
 	JButton search, cancel;
 	JTextField searchField;
 	// constructor for SearchByIdDialog 
-	public SearchByIdDialog(EmployeeDetails parent) {
+	public SearchByIdDialog(ApplicationView parent) {
 		setTitle("Search by Surname");
 		setModal(true);
 		this.parent = parent;

@@ -20,11 +20,11 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
 public class SearchBySurnameDialog extends JDialog implements ActionListener{
-	EmployeeDetails parent;
+	ApplicationView parent;
 	JButton search, cancel;
 	JTextField searchField;
 	// constructor for search by surname dialog
-	public SearchBySurnameDialog(EmployeeDetails parent) {
+	public SearchBySurnameDialog(ApplicationView parent) {
 		setTitle("Search by Surname");
 		setModal(true);
 		this.parent = parent;
