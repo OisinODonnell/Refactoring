@@ -5,7 +5,6 @@ import javax.swing.*;
  */
 public interface View {
 
-    JMenuBar menuBar(ApplicationView application, ApplicationPresenter domain);
     JPanel searchPanel();
     JPanel navigPanel();
     JPanel buttonPanel();
