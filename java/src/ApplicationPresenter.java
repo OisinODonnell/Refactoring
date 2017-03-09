@@ -13,13 +13,6 @@ public class ApplicationPresenter implements Presenter, Constants {
         this.view = view;
     }
 
-    private View getView() {
-        if (view == null) {
-            throw new IllegalStateException("The view is not set");
-        }
-        return view;
-    }
-
     public JMenu createFileMenu(ApplicationView context) {
         JMenu fileMenu = new JMenu("File");
         fileMenu.setMnemonic(KeyEvent.VK_F);
@@ -115,16 +108,16 @@ public class ApplicationPresenter implements Presenter, Constants {
     public JPanel createButtonPanel(ApplicationView context) {
         JPanel buttonPanel = new JPanel();
 
-        buttonPanel.add(context.add = new JButton("Add Record"), "growx, pushx");
+        buttonPanel.add(context.add = new JButton("Add Record"), LABEL_CONSTRAINTS);
         context.add.addActionListener(context);
         context.add.setToolTipText("Add new Employee Record");
-        buttonPanel.add(context.edit = new JButton("Edit Record"), "growx, pushx");
+        buttonPanel.add(context.edit = new JButton("Edit Record"), LABEL_CONSTRAINTS);
         context.edit.addActionListener(context);
         context.edit.setToolTipText("Edit current Employee");
-        buttonPanel.add(context.deleteButton = new JButton("Delete Record"), "growx, pushx, wrap");
+        buttonPanel.add(context.deleteButton = new JButton("Delete Record"), FIELD_CONSTRAINTS);
         context.deleteButton.addActionListener(context);
         context.deleteButton.setToolTipText("Delete current Employee");
-        buttonPanel.add(context.displayAll = new JButton("List all Records"), "growx, pushx");
+        buttonPanel.add(context.displayAll = new JButton("List all Records"), LABEL_CONSTRAINTS);
         context.displayAll.addActionListener(context);
         context.displayAll.setToolTipText("List all Registered Employees");
 
@@ -135,27 +128,27 @@ public class ApplicationPresenter implements Presenter, Constants {
         JPanel searchPanel = new JPanel(new MigLayout());
 
         searchPanel.setBorder(BorderFactory.createTitledBorder("Search"));
-        searchPanel.add(new JLabel("Search by ID:"), "growx, pushx");
-        searchPanel.add(context.searchByIdField = new JTextField(20), "width 200:200:200, growx, pushx");
+        searchPanel.add(new JLabel("Search by ID:"), LABEL_CONSTRAINTS);
+        searchPanel.add(context.searchByIdField = new JTextField(COLUMNS), "width 200:200:200,"+LABEL_CONSTRAINTS);
         context.searchByIdField.addActionListener(context);
-        context.searchByIdField.setDocument(new JTextFieldLimit(20));
+        context.searchByIdField.setDocument(new JTextFieldLimit(COLUMNS));
         //context.searchByIdField.setText("Search by ID");
 
         searchPanel.add(context.searchId = new JButton(new ImageIcon(
                         new ImageIcon("imgres.png").getImage().getScaledInstance(35, 20, java.awt.Image.SCALE_SMOOTH))),
-                "width 35:35:35, height 20:20:20, growx, pushx, wrap");
+                "width 35:35:35, height 20:20:20,"+ FIELD_CONSTRAINTS);
         context.searchId.addActionListener(context);
         context.searchId.setToolTipText("Search Employee By ID");
 
-        searchPanel.add(new JLabel("Search by Surname:"), "growx, pushx");
-        searchPanel.add(context.searchBySurnameField = new JTextField(20), "width 200:200:200, growx, pushx");
+        searchPanel.add(new JLabel("Search by Surname:"), LABEL_CONSTRAINTS);
+        searchPanel.add(context.searchBySurnameField = new JTextField(COLUMNS), "width 200:200:200,"+LABEL_CONSTRAINTS);
         context.searchBySurnameField.addActionListener(context);
-        context.searchBySurnameField.setDocument(new JTextFieldLimit(20));
+        context.searchBySurnameField.setDocument(new JTextFieldLimit(COLUMNS));
         // context.searchBySurnameField.setText("Search by Surname");
         searchPanel.add(
                 context.searchSurname = new JButton(new ImageIcon(new ImageIcon("imgres.png").getImage()
                         .getScaledInstance(35, 20, java.awt.Image.SCALE_SMOOTH))),
-                "width 35:35:35, height 20:20:20, growx, pushx, wrap");
+                "width 35:35:35, height 20:20:20,"+ FIELD_CONSTRAINTS);
         context.searchSurname.addActionListener(context);
         context.searchSurname.setToolTipText("Search Employee By Surname");
 
