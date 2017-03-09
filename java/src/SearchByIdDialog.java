@@ -69,7 +69,7 @@ public class SearchByIdDialog extends Dialog implements ActionListener {
 		searchPanel.add(buttonPanel);
 
 		return searchPanel;
-	}// end searchPane
+	}// end createSearchPanel
 
 	// action listener for save and cancel button
 	public void actionPerformed(ActionEvent e) {

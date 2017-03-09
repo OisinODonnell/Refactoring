@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,9 +19,11 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
 public class SearchBySurnameDialog extends Dialog implements ActionListener{
+
 	ApplicationView parent;
 	JButton search, cancel;
 	JTextField searchField;
+
 	// constructor for search by surname dialog
 	public SearchBySurnameDialog(ApplicationView parent) {
 		setTitle("Search by Surname");
@@ -30,7 +31,7 @@ public class SearchBySurnameDialog extends Dialog implements ActionListener{
 		this.parent = parent;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-		JScrollPane scrollPane = new JScrollPane(searchPane());
+		JScrollPane scrollPane = new JScrollPane(createSearchPanel());
 		setContentPane(scrollPane);
 
 		getRootPane().setDefaultButton(search);
@@ -38,10 +39,9 @@ public class SearchBySurnameDialog extends Dialog implements ActionListener{
 		setSize(SEARCH_WIDTH, SEARCH_HEIGHT);
 		setLocation(X_POS, Y_POS);
 		setVisible(true);
-	}// end SearchBySurnameDialog
-	
-	// initialize search container
-	public Container searchPane() {
+	}
+
+	public Container createSearchPanel() {
 		JPanel searchPanel = new JPanel(new GridLayout(3,1));
 		JPanel textPanel = new JPanel();
 		JPanel buttonPanel = new JPanel();
@@ -67,19 +67,17 @@ public class SearchBySurnameDialog extends Dialog implements ActionListener{
 		searchPanel.add(buttonPanel);
 
 		return searchPanel;
-	}// end searchPane
+	}
 
-	// action listener for save and cancel button
 	public void actionPerformed(ActionEvent e) {
 		// if option search, search for Employee
 		if(e.getSource() == search){
 			this.parent.searchBySurnameField.setText(searchField.getText());
 			// search Employee by surname
 			this.parent.searchEmployeeBySurname();
-			dispose();// dispose dialog
-		}// end if
-		// else dispose dialog
+			dispose();
+		}
 		else if(e.getSource() == cancel)
-			dispose();// dispose dialog
-	}// end actionPerformed
-}// end class SearchBySurnameDialog
+			dispose();
+	}
+}
