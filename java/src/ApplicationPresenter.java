@@ -25,58 +25,96 @@ public class ApplicationPresenter implements Presenter {
         return view;
     }
 
+
+    public JMenuItem createJMenuItem(String title, int key, int event) {
+        JMenuItem newItem = new JMenuItem();
+        newItem.setText(title);
+        newItem.setMnemonic(key);
+        newItem.setAccelerator(KeyStroke.getKeyStroke(key,event));
+
+        return newItem;
+    }
+
+    public JMenuItem createJMenuItem(String title) {
+        JMenuItem newItem = new JMenuItem();
+        newItem.setText(title);
+        return newItem;
+    }
+
+    public JMenu createRecordMenu(ApplicationView context) {
+        JMenu recordMenu  = new JMenu("Records");
+        recordMenu.setMnemonic(KeyEvent.VK_R);
+
+        context.create = createJMenuItem("Create new Record", KeyEvent.VK_N, ActionEvent.CTRL_MASK);
+        context.modify = createJMenuItem("Modify Record", KeyEvent.VK_E, ActionEvent.CTRL_MASK);
+        context.delete = createJMenuItem("Delete Record");
+
+        recordMenu.add(context.create).addActionListener(context);
+        recordMenu.add(context.modify).addActionListener(context);
+        recordMenu.add(context.delete).addActionListener(context);
+
+        return recordMenu;
+
+    }
+
+    public JMenu createNavigateMenu(ApplicationView context) {
+        JMenu navigateMenu = new JMenu("Navigate");
+        navigateMenu.setMnemonic(KeyEvent.VK_N);
+
+        context.firstItem = createJMenuItem("First");
+        context.prevItem = createJMenuItem("Previous");
+        context.nextItem = createJMenuItem("Next");
+        context.lastItem = createJMenuItem("Last");
+        context.searchById = createJMenuItem("Search by ID");
+        context.searchBySurname = createJMenuItem("Search by Surname");
+
+        navigateMenu.add(context.firstItem).addActionListener(context);
+        navigateMenu.add(context.prevItem).addActionListener(context);
+        navigateMenu.add(context.nextItem).addActionListener(context);
+        navigateMenu.add(context.lastItem).addActionListener(context);
+        navigateMenu.add(context.searchById).addActionListener(context);
+        navigateMenu.add(context.searchBySurname).addActionListener(context);
+
+        return navigateMenu;
+    }
+
+    public JMenu createCloseMenu(ApplicationView context) {
+        JMenu closeMenu = new JMenu("Exit");
+        closeMenu.setMnemonic(KeyEvent.VK_E);
+
+        context.closeApp = createJMenuItem("Close", KeyEvent.VK_F4, ActionEvent.CTRL_MASK);
+        closeMenu.add(context.closeApp).addActionListener(context);
+
+        return closeMenu;
+    }
+
+    public JMenu createFileMenu(ApplicationView context) {
+        JMenu fileMenu = new JMenu("File");
+        fileMenu.setMnemonic(KeyEvent.VK_F);
+
+        context.open   = createJMenuItem  ("Open", KeyEvent.VK_O, ActionEvent.CTRL_MASK);
+        context.save   = createJMenuItem  ("Save", KeyEvent.VK_S, ActionEvent.CTRL_MASK);
+        context.saveAs = createJMenuItem("Save As", KeyEvent.VK_F2, ActionEvent.CTRL_MASK);
+
+        fileMenu.add(context.open).addActionListener(context);
+        fileMenu.add(context.save).addActionListener(context);
+        fileMenu.add(context.saveAs).addActionListener(context);
+
+        return fileMenu;
+    }
     public JMenuBar menuBar(ApplicationView context, ApplicationPresenter domain) {
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu, recordMenu, navigateMenu, closeMenu;
 
-        fileMenu = new JMenu("File");
-        fileMenu.setMnemonic(KeyEvent.VK_F);
-        recordMenu = new JMenu("Records");
-        recordMenu.setMnemonic(KeyEvent.VK_R);
-        navigateMenu = new JMenu("Navigate");
-        navigateMenu.setMnemonic(KeyEvent.VK_N);
-        closeMenu = new JMenu("Exit");
-        closeMenu.setMnemonic(KeyEvent.VK_E);
+        fileMenu = createFileMenu(context);
+        recordMenu = createRecordMenu(context);
+        navigateMenu = createNavigateMenu(context);
+        closeMenu = createCloseMenu(context);
 
         menuBar.add(fileMenu);
         menuBar.add(recordMenu);
         menuBar.add(navigateMenu);
         menuBar.add(closeMenu);
-
-        fileMenu.add(context.open = new JMenuItem("Open")).addActionListener(context);
-        context.open.setMnemonic(KeyEvent.VK_O);
-        context.open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
-        fileMenu.add(context.save = new JMenuItem("Save")).addActionListener(context);
-        context.save.setMnemonic(KeyEvent.VK_S);
-        context.save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
-        fileMenu.add(context.saveAs = new JMenuItem("Save As")).addActionListener(context);
-        context.saveAs.setMnemonic(KeyEvent.VK_F2);
-        context.saveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, ActionEvent.CTRL_MASK));
-
-        recordMenu.add(context.create = new JMenuItem("Create new Record")).addActionListener(context);
-        context.create.setMnemonic(KeyEvent.VK_N);
-        context.create.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
-        recordMenu.add(context.modify = new JMenuItem("Modify Record")).addActionListener(context);
-        context.modify.setMnemonic(KeyEvent.VK_E);
-        context.modify.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.CTRL_MASK));
-        recordMenu.add(context.delete = new JMenuItem("Delete Record")).addActionListener(context);
-
-        navigateMenu.add(context.firstItem = new JMenuItem("First"));
-        context.firstItem.addActionListener(context);
-        navigateMenu.add(context.prevItem = new JMenuItem("Previous"));
-        context.prevItem.addActionListener(context);
-        navigateMenu.add(context.nextItem = new JMenuItem("Next"));
-        context.nextItem.addActionListener(context);
-        navigateMenu.add(context.lastItem = new JMenuItem("Last"));
-        context.lastItem.addActionListener(context);
-        navigateMenu.addSeparator();
-        navigateMenu.add(context.searchById = new JMenuItem("Search by ID")).addActionListener(context);
-        navigateMenu.add(context.searchBySurname = new JMenuItem("Search by Surname")).addActionListener(context);
-        navigateMenu.add(context.listAll = new JMenuItem("List all Records")).addActionListener(context);
-
-        closeMenu.add(context.closeApp = new JMenuItem("Close")).addActionListener(context);
-        context.closeApp.setMnemonic(KeyEvent.VK_F4);
-        context.closeApp.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.CTRL_MASK));
 
         return menuBar;
     }
