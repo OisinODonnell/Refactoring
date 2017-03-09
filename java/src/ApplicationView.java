@@ -57,7 +57,7 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 	private static final DecimalFormat fieldFormat = new DecimalFormat("0.00");
 	// hold object start position in file
 	private long currentByteStart = 0;
-	private RandomFile application = new RandomFile();
+	private RandomFile randomFile = new RandomFile();
 	// display files in File Chooser only with extension .dat
 	private FileNameExtensionFilter datfilter = new FileNameExtensionFilter("dat files (*.dat)", "dat");
 	// hold file name and path for current file in use
@@ -381,12 +381,12 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 		// if any active record in file look for first record
 		if (isSomeoneToDisplay()) {
 			// open file for reading
-			application.openReadFile(file.getAbsolutePath());
+			randomFile.openReadFile(file.getAbsolutePath());
 			// get byte start in file for first record
-			currentByteStart = application.getFirst();
+			currentByteStart = randomFile.getFirst();
 			// assign current Employee to first record in file
-			currentEmployee = application.readRecords(currentByteStart);
-			application.closeReadFile();// close file for reading
+			currentEmployee = randomFile.readRecords(currentByteStart);
+			randomFile.closeReadFile();// close file for reading
 			// if first record is inactive look for next record
 			if (currentEmployee.getEmployeeId() == 0)
 				nextRecord();// look for next record
@@ -398,19 +398,19 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 		// if any active record in file look for first record
 		if (isSomeoneToDisplay()) {
 			// open file for reading
-			application.openReadFile(file.getAbsolutePath());
+			randomFile.openReadFile(file.getAbsolutePath());
 			// get byte start in file for previous record
-			currentByteStart = application.getPrevious(currentByteStart);
+			currentByteStart = randomFile.getPrevious(currentByteStart);
 			// assign current Employee to previous record in file
-			currentEmployee = application.readRecords(currentByteStart);
+			currentEmployee = randomFile.readRecords(currentByteStart);
 			// loop to previous record until Employee is active - ID is not 0
 			while (currentEmployee.getEmployeeId() == 0) {
 				// get byte start in file for previous record
-				currentByteStart = application.getPrevious(currentByteStart);
+				currentByteStart = randomFile.getPrevious(currentByteStart);
 				// assign current Employee to previous record in file
-				currentEmployee = application.readRecords(currentByteStart);
+				currentEmployee = randomFile.readRecords(currentByteStart);
 			} // end while
-			application.closeReadFile();// close file for reading
+			randomFile.closeReadFile();// close file for reading
 		}
 	}// end previousRecord
 
@@ -419,19 +419,19 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 		// if any active record in file look for first record
 		if (isSomeoneToDisplay()) {
 			// open file for reading
-			application.openReadFile(file.getAbsolutePath());
+			randomFile.openReadFile(file.getAbsolutePath());
 			// get byte start in file for next record
-			currentByteStart = application.getNext(currentByteStart);
+			currentByteStart = randomFile.getNext(currentByteStart);
 			// assign current Employee to record in file
-			currentEmployee = application.readRecords(currentByteStart);
+			currentEmployee = randomFile.readRecords(currentByteStart);
 			// loop to previous next until Employee is active - ID is not 0
 			while (currentEmployee.getEmployeeId() == 0) {
 				// get byte start in file for next record
-				currentByteStart = application.getNext(currentByteStart);
+				currentByteStart = randomFile.getNext(currentByteStart);
 				// assign current Employee to next record in file
-				currentEmployee = application.readRecords(currentByteStart);
+				currentEmployee = randomFile.readRecords(currentByteStart);
 			} // end while
-			application.closeReadFile();// close file for reading
+			randomFile.closeReadFile();// close file for reading
 		} // end if
 	}// end nextRecord
 
@@ -440,12 +440,12 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 		// if any active record in file look for first record
 		if (isSomeoneToDisplay()) {
 			// open file for reading
-			application.openReadFile(file.getAbsolutePath());
+			randomFile.openReadFile(file.getAbsolutePath());
 			// get byte start in file for last record
-			currentByteStart = application.getLast();
+			currentByteStart = randomFile.getLast();
 			// assign current Employee to first record in file
-			currentEmployee = application.readRecords(currentByteStart);
-			application.closeReadFile();// close file for reading
+			currentEmployee = randomFile.readRecords(currentByteStart);
+			randomFile.closeReadFile();// close file for reading
 			// if last record is inactive look for previous record
 			if (currentEmployee.getEmployeeId() == 0)
 				previousRecord();// look for previous record
@@ -568,10 +568,10 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 	// add Employee object to fail
 	public void addRecord(Employee newEmployee) {
 		// open file for writing
-		application.openWriteFile(file.getAbsolutePath());
+		randomFile.openWriteFile(file.getAbsolutePath());
 		// write into a file
-		currentByteStart = application.addRecords(newEmployee);
-		application.closeWriteFile();// close file for writing
+		currentByteStart = randomFile.addRecords(newEmployee);
+		randomFile.closeWriteFile();// close file for writing
 	}// end addRecord
 
 	// delete (make inactive - empty) record from file
@@ -583,10 +583,10 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 			// if answer yes delete (make inactive - empty) record
 			if (returnVal == JOptionPane.YES_OPTION) {
 				// open file for writing
-				application.openWriteFile(file.getAbsolutePath());
+				randomFile.openWriteFile(file.getAbsolutePath());
 				// delete (make inactive - empty) record in file proper position
-				application.deleteRecords(currentByteStart);
-				application.closeWriteFile();// close file for writing
+				randomFile.deleteRecords(currentByteStart);
+				randomFile.closeWriteFile();// close file for writing
 				// if any active record in file display next record
 				if (isSomeoneToDisplay()) {
 					nextRecord();// look for next record
@@ -647,10 +647,10 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 	private boolean isSomeoneToDisplay() {
 		boolean someoneToDisplay = false;
 		// open file for reading
-		application.openReadFile(file.getAbsolutePath());
+		randomFile.openReadFile(file.getAbsolutePath());
 		// check if any of records in file is active - ID is not 0
-		someoneToDisplay = application.isSomeoneToDisplay();
-		application.closeReadFile();// close file for reading
+		someoneToDisplay = randomFile.isSomeoneToDisplay();
+		randomFile.closeReadFile();// close file for reading
 		// if no records found clear all text fields and display message
 		if (!someoneToDisplay) {
 			currentEmployee = null;
@@ -678,10 +678,10 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 					&& Character.isDigit(pps.charAt(6))	&& Character.isLetter(pps.charAt(7))
 					&& (pps.length() == 8 || Character.isLetter(pps.charAt(8)))) {
 				// open file for reading
-				application.openReadFile(file.getAbsolutePath());
+				randomFile.openReadFile(file.getAbsolutePath());
 				// look in file is PPS already in use
-				ppsExist = application.isPpsExist(pps, currentByte);
-				application.closeReadFile();// close file for reading
+				ppsExist = randomFile.isPpsExist(pps, currentByte);
+				randomFile.closeReadFile();// close file for reading
 			} // end if
 			else
 				ppsExist = true;
@@ -840,10 +840,10 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 				file.delete();// delete file
 			file = newFile;// assign opened file to file
 			// open file for reading
-			application.openReadFile(file.getAbsolutePath());
+			randomFile.openReadFile(file.getAbsolutePath());
 			firstRecord();// look for first record
 			displayRecords(currentEmployee);
-			application.closeReadFile();// close file for reading
+			randomFile.closeReadFile();// close file for reading
 		} // end if
 	}// end openFile
 
@@ -864,13 +864,13 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 					// save changes if ID field is not empty
 					if (!idField.getText().equals("")) {
 						// open file for writing
-						application.openWriteFile(file.getAbsolutePath());
+						randomFile.openWriteFile(file.getAbsolutePath());
 						// get changes for current Employee
 						currentEmployee = getChangedDetails();
 						// write changes to file for corresponding Employee
 						// record
-						application.changeRecords(currentEmployee, currentByteStart);
-						application.closeWriteFile();// close file for writing
+						randomFile.changeRecords(currentEmployee, currentByteStart);
+						randomFile.closeWriteFile();// close file for writing
 					} // end if
 				} // end if
 			} // end if
@@ -887,12 +887,12 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 		// if user choose to save changes, save changes
 		if (returnVal == JOptionPane.YES_OPTION) {
 			// open file for writing
-			application.openWriteFile(file.getAbsolutePath());
+			randomFile.openWriteFile(file.getAbsolutePath());
 			// get changes for current Employee
 			currentEmployee = getChangedDetails();
 			// write changes to file for corresponding Employee record
-			application.changeRecords(currentEmployee, currentByteStart);
-			application.closeWriteFile();// close file for writing
+			randomFile.changeRecords(currentEmployee, currentByteStart);
+			randomFile.closeWriteFile();// close file for writing
 			changesMade = false;// state that all changes has bee saved
 		} // end if
 		displayRecords(currentEmployee);
@@ -919,11 +919,11 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 				// add .dat extension if it was not there
 				newFile = new File(newFile.getAbsolutePath() + ".dat");
 				// create new file
-				application.createFile(newFile.getAbsolutePath());
+				randomFile.createFile(newFile.getAbsolutePath());
 			} // end id
 			else
 				// create new file
-				application.createFile(newFile.getAbsolutePath());
+				randomFile.createFile(newFile.getAbsolutePath());
 
 			try {// try to copy old file to new file
 				Files.copy(file.toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -938,7 +938,7 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 		changesMade = false;
 	}// end saveFileAs
 
-	// allow to save changes to file when exiting the application
+	// allow to save changes to file when exiting the randomFile
 	private void exitApp() {
 		// if file is not empty allow to save changes
 		if (file.length() != 0) {
@@ -951,28 +951,28 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 					// delete generated file if user saved details to other file
 					if (file.getName().equals(generatedFileName))
 						file.delete();// delete file
-					System.exit(0);// exit application
+					System.exit(0);// exit randomFile
 				} // end if
-					// else exit application
+					// else exit randomFile
 				else if (returnVal == JOptionPane.NO_OPTION) {
 					// delete generated file if user chooses not to save file
 					if (file.getName().equals(generatedFileName))
 						file.delete();// delete file
-					System.exit(0);// exit application
+					System.exit(0);// exit randomFile
 				} // end else if
 			} // end if
 			else {
 				// delete generated file if user chooses not to save file
 				if (file.getName().equals(generatedFileName))
 					file.delete();// delete file
-				System.exit(0);// exit application
+				System.exit(0);// exit randomFile
 			} // end else
-				// else exit application
+				// else exit randomFile
 		} else {
 			// delete generated file if user chooses not to save file
 			if (file.getName().equals(generatedFileName))
 				file.delete();// delete file
-			System.exit(0);// exit application
+			System.exit(0);// exit randomFile
 		} // end else
 	}// end exitApp
 
@@ -990,13 +990,13 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 		return generatedfileName;
 	}// end getFileName
 
-	// create file with generated file name when application is opened
+	// create file with generated file name when randomFile is opened
 	private void createRandomFile() {
 		generatedFileName = getFileName() + ".dat";
 		// assign generated file name to file
 		file = new File(generatedFileName);
 		// create file
-		application.createFile(file.getName());
+		randomFile.createFile(file.getName());
 	}// end createRandomFile
 
 	// action listener for buttons, text field and menu items
@@ -1116,7 +1116,7 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 
 	// WindowsListener methods
 	public void windowClosing(WindowEvent e) {
-		// exit application
+		// exit randomFile
 		exitApp();
 	}
 
