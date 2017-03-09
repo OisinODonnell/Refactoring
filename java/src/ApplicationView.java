@@ -8,14 +8,11 @@
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -26,22 +23,15 @@ import java.text.DecimalFormat;
 import java.util.Random;
 import java.util.Vector;
 
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -185,7 +175,7 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 			currentByteStart = randomFile.getFirst();
 			// assign current Employee to first record in file
 			currentEmployee = randomFile.readRecords(currentByteStart);
-			randomFile.closeReadFile();// close file for reading
+			randomFile.closeFile();// close file for reading
 			// if first record is inactive look for next record
 			if (currentEmployee.getEmployeeId() == 0)
 				nextRecord();// look for next record
@@ -209,7 +199,7 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 				// assign current Employee to previous record in file
 				currentEmployee = randomFile.readRecords(currentByteStart);
 			} // end while
-			randomFile.closeReadFile();// close file for reading
+			randomFile.closeFile();// close file for reading
 		}
 	}// end previousRecord
 
@@ -230,7 +220,7 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 				// assign current Employee to next record in file
 				currentEmployee = randomFile.readRecords(currentByteStart);
 			} // end while
-			randomFile.closeReadFile();// close file for reading
+			randomFile.closeFile();// close file for reading
 		} // end if
 	}// end nextRecord
 
@@ -244,7 +234,7 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 			currentByteStart = randomFile.getLast();
 			// assign current Employee to first record in file
 			currentEmployee = randomFile.readRecords(currentByteStart);
-			randomFile.closeReadFile();// close file for reading
+			randomFile.closeFile();// close file for reading
 			// if last record is inactive look for previous record
 			if (currentEmployee.getEmployeeId() == 0)
 				previousRecord();// look for previous record
@@ -370,7 +360,7 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 		randomFile.openWriteFile(file.getAbsolutePath());
 		// write into a file
 		currentByteStart = randomFile.addRecords(newEmployee);
-		randomFile.closeWriteFile();// close file for writing
+		randomFile.closeFile();// close file for writing
 	}// end addRecord
 
 	// delete (make inactive - empty) record from file
@@ -385,7 +375,7 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 				randomFile.openWriteFile(file.getAbsolutePath());
 				// delete (make inactive - empty) record in file proper position
 				randomFile.deleteRecords(currentByteStart);
-				randomFile.closeWriteFile();// close file for writing
+				randomFile.closeFile();// close file for writing
 				// if any active record in file display next record
 				if (isSomeoneToDisplay()) {
 					nextRecord();// look for next record
@@ -449,7 +439,7 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 		randomFile.openReadFile(file.getAbsolutePath());
 		// check if any of records in file is active - ID is not 0
 		someoneToDisplay = randomFile.isSomeoneToDisplay();
-		randomFile.closeReadFile();// close file for reading
+		randomFile.closeFile();// close file for reading
 		// if no records found clear all text fields and display message
 		if (!someoneToDisplay) {
 			currentEmployee = null;
@@ -480,7 +470,7 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 				randomFile.openReadFile(file.getAbsolutePath());
 				// look in file is PPS already in use
 				ppsExist = randomFile.isPpsExist(pps, currentByte);
-				randomFile.closeReadFile();// close file for reading
+				randomFile.closeFile();// close file for reading
 			} // end if
 			else
 				ppsExist = true;
@@ -642,7 +632,7 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 			randomFile.openReadFile(file.getAbsolutePath());
 			firstRecord();// look for first record
 			displayRecords(currentEmployee);
-			randomFile.closeReadFile();// close file for reading
+			randomFile.closeFile();// close file for reading
 		} // end if
 	}// end openFile
 
@@ -669,7 +659,7 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 						// write changes to file for corresponding Employee
 						// record
 						randomFile.changeRecords(currentEmployee, currentByteStart);
-						randomFile.closeWriteFile();// close file for writing
+						randomFile.closeFile();// close file for writing
 					} // end if
 				} // end if
 			} // end if
@@ -691,7 +681,7 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 			currentEmployee = getChangedDetails();
 			// write changes to file for corresponding Employee record
 			randomFile.changeRecords(currentEmployee, currentByteStart);
-			randomFile.closeWriteFile();// close file for writing
+			randomFile.closeFile();// close file for writing
 			changesMade = false;// state that all changes has bee saved
 		} // end if
 		displayRecords(currentEmployee);
@@ -860,77 +850,6 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
             } // switch
         }
     }
-
-    // action listener for buttons, text field and menu items
-	    public void actionPerformed2(ActionEvent e) {
-
-		if (e.getSource() == closeApp) {
-			if (checkInput() && !checkForChanges())
-				exitApp();
-		} else if (e.getSource() == open) {
-			if (checkInput() && !checkForChanges())
-				openFile();
-		} else if (e.getSource() == save) {
-			if (checkInput() && !checkForChanges())
-				saveFile();
-			change = false;
-		} else if (e.getSource() == saveAs) {
-			if (checkInput() && !checkForChanges())
-				saveFileAs();
-			change = false;
-		} else if (e.getSource() == searchById) {
-			if (checkInput() && !checkForChanges())
-				displaySearchByIdDialog();
-		} else if (e.getSource() == searchBySurname) {
-			if (checkInput() && !checkForChanges())
-				displaySearchBySurnameDialog();
-		} else if (e.getSource() == searchId || e.getSource() == searchByIdField)
-			searchEmployeeById();
-		else if (e.getSource() == searchSurname || e.getSource() == searchBySurnameField)
-			searchEmployeeBySurname();
-		else if (e.getSource() == saveChange) {
-			if (checkInput() && !checkForChanges())
-				;
-		} else if (e.getSource() == cancelChange)
-			cancelChange();
-		else if (e.getSource() == firstItem || e.getSource() == first) {
-			if (checkInput() && !checkForChanges()) {
-				firstRecord();
-				displayRecords(currentEmployee);
-			}
-		} else if (e.getSource() == prevItem || e.getSource() == previous) {
-			if (checkInput() && !checkForChanges()) {
-				previousRecord();
-				displayRecords(currentEmployee);
-			}
-		} else if (e.getSource() == nextItem || e.getSource() == next) {
-			if (checkInput() && !checkForChanges()) {
-				nextRecord();
-				displayRecords(currentEmployee);
-			}
-		} else if (e.getSource() == lastItem || e.getSource() == last) {
-			if (checkInput() && !checkForChanges()) {
-				lastRecord();
-				displayRecords(currentEmployee);
-			}
-		} else if (e.getSource() == listAll || e.getSource() == displayAll) {
-			if (checkInput() && !checkForChanges())
-				if (isSomeoneToDisplay())
-					displayEmployeeSummaryDialog();
-		} else if (e.getSource() == create || e.getSource() == add) {
-			if (checkInput() && !checkForChanges())
-				new AddRecordDialog(ApplicationView.this);
-		} else if (e.getSource() == modify || e.getSource() == edit) {
-			if (checkInput() && !checkForChanges())
-				editDetails();
-		} else if (e.getSource() == delete || e.getSource() == deleteButton) {
-			if (checkInput() && !checkForChanges())
-				deleteRecord();
-		} else if (e.getSource() == searchBySurname) {
-			if (checkInput() && !checkForChanges())
-				new SearchBySurnameDialog(ApplicationView.this);
-		}
-	}// end actionPerformed
 
 	// content pane for main dialog
 	private void createContentPane(ApplicationView application, ApplicationPresenter domain) {

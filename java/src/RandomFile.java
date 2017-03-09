@@ -52,19 +52,6 @@ public class RandomFile {
 		} // end catch
 	} // end method openFile
 
-	// Close file for adding or changing records
-	public void closeWriteFile() {
-		try // close file and exit
-		{
-			if (output != null)
-				output.close();
-		} // end try
-		catch (IOException ioException) {
-			JOptionPane.showMessageDialog(null, "Error closing file!");
-			System.exit(1);
-		} // end catch
-	} // end closeFile
-
 	// Add records to file
 	public long addRecords(Employee employeeToAdd) {
 		Employee newEmployee = employeeToAdd;
@@ -146,7 +133,7 @@ public class RandomFile {
 	} // end method openFile
 
 	// Close file
-	public void closeReadFile() {
+	public void closeFile() {
 		try // close file and exit
 		{
 			if (input != null)
