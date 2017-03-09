@@ -150,6 +150,7 @@ public class RandomFile {
 			input.length();
 		} // end try
 		catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "IO Exception found");
 		}// end catch
 
 		return byteToStart;
@@ -182,6 +183,7 @@ public class RandomFile {
 				byteToStart = byteToStart + RandomAccessEmployeeRecord.SIZE;
 		} // end try
 		catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null, "Number Format Exception Found");
 		} // end catch
 		catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "IO Exception");
