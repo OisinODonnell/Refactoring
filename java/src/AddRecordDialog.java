@@ -82,7 +82,7 @@ public class AddRecordDialog extends Dialog implements ActionListener, Constants
 				departmentCombo.getSelectedItem().toString(), Double.parseDouble(parent.salaryField.getText()), fullTime);
 		this.parent.currentEmployee = theEmployee;
 		this.parent.addRecord(theEmployee);
-		this.parent.displayRecords(theEmployee);
+		this.parent.displayEmployee(theEmployee);
 	}
 
 	public boolean checkTextFieldInput() {

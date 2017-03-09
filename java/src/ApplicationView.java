@@ -53,8 +53,8 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
     // holds true or false if any changes are made for file content
     boolean changesMade = false;
     public JMenuItem open, save, saveAs, create, modify, delete, firstItem, lastItem, nextItem, prevItem, searchById,
-            searchBySurname, listAll, closeApp;
-    public JButton saveBtn, cancel, first, previous, next, last, add, edit, deleteButton, displayAll, searchId, searchSurname,
+            searchBySurname, closeApp;
+    public JButton first, previous, next, last, add, edit, deleteButton, displayAll, searchId, searchSurname,
             saveChange, cancelChange;
     public JComboBox<String> genderCombo, departmentCombo, fullTimeCombo;
     public JTextField idField, ppsField, surnameField, firstNameField, salaryField;
@@ -90,8 +90,7 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
         frame.setVisible(true);
     }
 
-    // display current Employee details
-    public void displayRecords(Employee thisEmployee) {
+    public void displayEmployee(Employee thisEmployee) {
         int countGender = 0;
         int countDep = 0;
         boolean found = false;
@@ -138,10 +137,6 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
             new EmployeeSummaryDialog(getAllEmloyees());
     }
 
-    private void displaySearchByIdDialog() {
-        if (isSomeoneToDisplay())
-            new SearchByIdDialog(ApplicationView.this);
-    }
 
     private void displaySearchBySurnameDialog() {
         if (isSomeoneToDisplay())
@@ -228,7 +223,7 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
                     found = true;
                 else if (searchByIdField.getText().trim().equals(Integer.toString(currentEmployee.getEmployeeId()))) {
                     found = true;
-                    displayRecords(currentEmployee);
+                    displayEmployee(currentEmployee);
                 }
                 else {
                     nextRecord();
@@ -237,7 +232,7 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
                         // if found break from loop and display Employee details else look for next record
                         if (Integer.parseInt(searchByIdField.getText().trim()) == currentEmployee.getEmployeeId()) {
                             found = true;
-                            displayRecords(currentEmployee);
+                            displayEmployee(currentEmployee);
                             break;
                         } else
                             nextRecord();
@@ -268,7 +263,7 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
                 found = true;
             else if (searchBySurnameField.getText().trim().equalsIgnoreCase(currentEmployee.getSurname().trim())) {
                 found = true;
-                displayRecords(currentEmployee);
+                displayEmployee(currentEmployee);
             }
             else {
                 nextRecord();
@@ -279,7 +274,7 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
                     // else look for next record
                     if (searchBySurnameField.getText().trim().equalsIgnoreCase(currentEmployee.getSurname().trim())) {
                         found = true;
-                        displayRecords(currentEmployee);
+                        displayEmployee(currentEmployee);
                         break;
                     }
                     else
@@ -346,7 +341,7 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
                 // if any active record in file display next record
                 if (isSomeoneToDisplay()) {
                     nextRecord();
-                    displayRecords(currentEmployee);
+                    displayEmployee(currentEmployee);
                 }
             }
         }
@@ -395,7 +390,7 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
     // ignore changes and set text field unenabled
     private void cancelChange() {
         setEnabled(false);
-        displayRecords(currentEmployee);
+        displayEmployee(currentEmployee);
     }
 
     // check if any of records in file is active - ID is not 0
@@ -446,8 +441,7 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
         return ppsExist;
     }
 
-    // check if file name has extension .dat
-    private boolean checkFileName(File fileName) {
+    private boolean confirmDatExtension(File fileName) {
         boolean checkFile = false;
         int length = fileName.toString().length();
 
@@ -458,8 +452,7 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
         return checkFile;
     }
 
-    // check if any changes text field where made
-    private boolean checkForChanges() {
+    private boolean checkTextFieldForChanges() {
         boolean anyChanges = false;
         // if changes where made, allow user to save there changes
         if (change) {
@@ -469,7 +462,7 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
         // if no changes made, set text fields as unenabled and display current Employee
         else {
             setEnabled(false);
-            displayRecords(currentEmployee);
+            displayEmployee(currentEmployee);
         }
         return anyChanges;
     }
@@ -591,7 +584,7 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
                 file = newFile;
                 randomFile.openReadFile(file.getAbsolutePath());
                 firstRecord();
-                displayRecords(currentEmployee);
+                displayEmployee(currentEmployee);
                 randomFile.closeFile();
         }
     }
@@ -619,7 +612,7 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
                     }
                 }
             }
-            displayRecords(currentEmployee);
+            displayEmployee(currentEmployee);
             setEnabled(false);
         }
     }
@@ -636,7 +629,7 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
             randomFile.closeFile();
             changesMade = false;
         }
-        displayRecords(currentEmployee);
+        displayEmployee(currentEmployee);
         setEnabled(false);
     }
 
@@ -655,7 +648,7 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             newFile = fc.getSelectedFile();
 
-            if (!checkFileName(newFile)) {
+            if (!confirmDatExtension(newFile)) {
                 // add .dat extension if it was not there
                 newFile = new File(newFile.getAbsolutePath() + ".dat");
                 randomFile.createFile(newFile.getAbsolutePath());
@@ -725,7 +718,7 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
         else if (e.getSource() == searchBySurnameField)   searchEmployeeBySurname();
         else if (e.getSource() == cancelChange)      cancelChange();
 
-        if(checkInput() && !checkForChanges()) {
+        if(checkInput() && !checkTextFieldForChanges()) {
 
             switch(action) {
                 case "Close App":
@@ -746,19 +739,19 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
                     break;
                 case "First":
                     firstRecord();
-                    displayRecords(currentEmployee);
+                    displayEmployee(currentEmployee);
                     break;
                 case "Previous":
                     previousRecord();
-                    displayRecords(currentEmployee);
+                    displayEmployee(currentEmployee);
                     break;
                 case "Next":
                     nextRecord();
-                    displayRecords(currentEmployee);
+                    displayEmployee(currentEmployee);
                     break;
                 case "Last":
                     lastRecord();
-                    displayRecords(currentEmployee);
+                    displayEmployee(currentEmployee);
                     break;
                 case "List all Records":
                     if(isSomeoneToDisplay()) displayEmployeeSummaryDialog();
