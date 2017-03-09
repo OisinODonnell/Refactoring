@@ -347,7 +347,6 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
         }
     }
 
-    // create vector of vectors with all Employee details
     private Vector<Object> getAllEmloyees() {
         Vector<Object> allEmployee = new Vector<Object>();
         Vector<Object> empDetails;
