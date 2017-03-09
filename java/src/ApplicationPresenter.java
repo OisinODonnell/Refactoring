@@ -1,5 +1,4 @@
 import net.miginfocom.swing.MigLayout;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -200,7 +199,6 @@ public class ApplicationPresenter implements Presenter, Constants {
         return navigPanel;
     }
 
-    // initialize main/details panel
     public JPanel createDetailsPanel(ApplicationView context) {
         JPanel empDetails = new JPanel(new MigLayout());
         JPanel buttonPanel = new JPanel();
@@ -210,7 +208,6 @@ public class ApplicationPresenter implements Presenter, Constants {
         empDetails = buildEmpDetails(empDetails, buttonPanel, context);
 
         empDetails.setBorder(BorderFactory.createTitledBorder("Employee Details"));
-        //empDetails.add(buttonPanel, "span 2,"+FIELD_CONSTRAINTS);
 
         // loop through panel components and add listeners and format
         for (int i = 0; i < empDetails.getComponentCount(); i++) {

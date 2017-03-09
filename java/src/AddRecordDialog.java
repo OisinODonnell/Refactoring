@@ -4,22 +4,12 @@
  * 
  * */
 
-import java.awt.Color;
-import java.awt.Container;
+import net.miginfocom.swing.MigLayout;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-
-import net.miginfocom.swing.MigLayout;
 
 import static java.awt.Color.WHITE;
 
@@ -46,8 +36,7 @@ public class AddRecordDialog extends Dialog implements ActionListener, Constants
 	}
 
 
-    public JPanel setFontsAndListeners(JPanel empDetails)
-    {
+    public JPanel setFontsAndListeners(JPanel empDetails) {
         JTextField field;
         // loop through all panel components and add fonts and listeners
         for (int i = 0; i < empDetails.getComponentCount(); i++) {
@@ -80,9 +69,6 @@ public class AddRecordDialog extends Dialog implements ActionListener, Constants
 		return empDetails;
 	}
 
-
-
-
 	public void addRecord() {
 		boolean fullTime = false;
 		Employee theEmployee;
@@ -99,8 +85,7 @@ public class AddRecordDialog extends Dialog implements ActionListener, Constants
 		this.parent.displayRecords(theEmployee);
 	}
 
-	// check for input in text fields
-	public boolean checkInput() {
+	public boolean checkTextFieldInput() {
 		boolean valid = true;
 		// if any of inputs are in wrong format, colour text field and display message
 		if (parent.ppsField.getText().equals("")) {
@@ -144,10 +129,9 @@ public class AddRecordDialog extends Dialog implements ActionListener, Constants
 			valid = false;
 		}// end if
 		return valid;
-	}// end checkInput
+	}
 
-	// set text field to white colour
-	public void setToWhite() {
+	public void setTextFieldToWhite() {
 		parent.ppsField.setBackground(WHITE);
 		parent.surnameField.setBackground(WHITE);
 		parent.firstNameField.setBackground(WHITE);
@@ -155,14 +139,13 @@ public class AddRecordDialog extends Dialog implements ActionListener, Constants
 		genderCombo.setBackground(WHITE);
 		departmentCombo.setBackground(WHITE);
 		fullTimeCombo.setBackground(WHITE);
-	}// end setToWhite
+	}
 
-	// action performed
 	public void actionPerformed(ActionEvent e) {
 		// if chosen option save, save record to file
 		if (e.getSource() == saveBtn) {
 			// if inputs correct, save record
-			if (checkInput()) {
+			if (checkTextFieldInput()) {
 				addRecord();// add record to file
 				dispose();// dispose dialog
 				this.parent.changesMade = true;
@@ -170,10 +153,10 @@ public class AddRecordDialog extends Dialog implements ActionListener, Constants
 			// else display message and set text fields to white colour
 			else {
 				JOptionPane.showMessageDialog(null, "Wrong values or format! Please check!");
-				setToWhite();
+				setTextFieldToWhite();
 			}// end else
 		}// end if
 		else if (e.getSource() == cancel)
 			dispose();// dispose dialog
-	}// end actionPerformed
-}// end class AddRecordDialog
+	}
+}
