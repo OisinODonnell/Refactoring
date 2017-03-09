@@ -43,6 +43,8 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 
 	private Presenter presenter;
 
+	final Color PINK = new Color(255,150,150);
+
     // decimal format for inactive currency text field
 	private static final DecimalFormat format = new DecimalFormat("\u20ac ###,###,##0.00");
 	// decimal format for active currency text field
@@ -279,7 +281,7 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 			} // end if
 		} // end try
 		catch (NumberFormatException e) {
-			searchByIdField.setBackground(new Color(255, 150, 150));
+			searchByIdField.setBackground(PINK);
 			JOptionPane.showMessageDialog(null, "Wrong ID format!");
 		} // end catch
 		searchByIdField.setBackground(Color.WHITE);
@@ -517,45 +519,45 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 		// if any of inputs are in wrong format, colour text field and display
 		// message
 		if (ppsField.isEditable() && ppsField.getText().trim().isEmpty()) {
-			ppsField.setBackground(new Color(255, 150, 150));
+			ppsField.setBackground(PINK);
 			valid = false;
 		} // end if
 		if (ppsField.isEditable() && correctPps(ppsField.getText().trim(), currentByteStart)) {
-			ppsField.setBackground(new Color(255, 150, 150));
+			ppsField.setBackground(PINK);
 			valid = false;
 		} // end if
 		if (surnameField.isEditable() && surnameField.getText().trim().isEmpty()) {
-			surnameField.setBackground(new Color(255, 150, 150));
+			surnameField.setBackground(PINK);
 			valid = false;
 		} // end if
 		if (firstNameField.isEditable() && firstNameField.getText().trim().isEmpty()) {
-			firstNameField.setBackground(new Color(255, 150, 150));
+			firstNameField.setBackground(PINK);
 			valid = false;
 		} // end if
 		if (genderCombo.getSelectedIndex() == 0 && genderCombo.isEnabled()) {
-			genderCombo.setBackground(new Color(255, 150, 150));
+			genderCombo.setBackground(PINK);
 			valid = false;
 		} // end if
 		if (departmentCombo.getSelectedIndex() == 0 && departmentCombo.isEnabled()) {
-			departmentCombo.setBackground(new Color(255, 150, 150));
+			departmentCombo.setBackground(PINK);
 			valid = false;
 		} // end if
 		try {// try to get values from text field
 			Double.parseDouble(salaryField.getText());
 			// check if salary is greater than 0
 			if (Double.parseDouble(salaryField.getText()) < 0) {
-				salaryField.setBackground(new Color(255, 150, 150));
+				salaryField.setBackground(PINK);
 				valid = false;
 			} // end if
 		} // end try
 		catch (NumberFormatException num) {
 			if (salaryField.isEditable()) {
-				salaryField.setBackground(new Color(255, 150, 150));
+				salaryField.setBackground(PINK);
 				valid = false;
 			} // end if
 		} // end catch
 		if (fullTimeCombo.getSelectedIndex() == 0 && fullTimeCombo.isEnabled()) {
-			fullTimeCombo.setBackground(new Color(255, 150, 150));
+			fullTimeCombo.setBackground(PINK);
 			valid = false;
 		} // end if
 			// display message if any input or format is wrong
