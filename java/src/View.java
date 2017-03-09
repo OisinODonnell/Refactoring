@@ -5,8 +5,5 @@ import javax.swing.*;
  */
 public interface View {
 
-    JPanel searchPanel();
-    JPanel navigPanel();
-    JPanel buttonPanel();
-    JPanel detailsPanel();
+
 }
