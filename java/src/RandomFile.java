@@ -14,14 +14,15 @@ import javax.swing.JOptionPane;
 public class RandomFile {
 	private RandomAccessFile output;
 	private RandomAccessFile input;
+	private RandomAccessFile file = null;
+	private RandomAccessEmployeeRecord record  = new RandomAccessEmployeeRecord();
 
 	// Create new file
 	public void createFile(String fileName) {
-		RandomAccessFile file = null;
 
 		file = openFile(fileName, "rw", "Error processing file!" );
 
-		if (file==null)
+		if (file == null)
 			System.exit(1);
 		else
 			closeFile();
@@ -31,8 +32,6 @@ public class RandomFile {
 
 	public RandomAccessFile openFile(String fileName, String mode, String errMessage)
 	{
-		RandomAccessFile file = null;
-
 		try { // open file
 			file = new RandomAccessFile(fileName, mode);
 		} // end try
@@ -75,9 +74,6 @@ public class RandomFile {
 		Employee newEmployee = employeeToAdd;
 		long currentRecordStart = 0;
 
-		// object to be written to file
-		RandomAccessEmployeeRecord record;
-
 		try // output values to file
 		{
 			record = new RandomAccessEmployeeRecord(newEmployee.getEmployeeId(), newEmployee.getPps(),
@@ -104,7 +100,7 @@ public class RandomFile {
 	public void changeRecords(Employee newDetails, long byteToStart) {
 		long currentRecordStart = byteToStart;
 		// object to be written to file
-		RandomAccessEmployeeRecord record;
+
 		Employee oldDetails = newDetails;
 		try // output values to file
 		{
@@ -124,8 +120,6 @@ public class RandomFile {
 	public void deleteRecords(long byteToStart) {
 		long currentRecordStart = byteToStart;
 
-		// object to be written to file
-		RandomAccessEmployeeRecord record;
 		;
 
 		try // output values to file
@@ -215,7 +209,6 @@ public class RandomFile {
 	// Get object from file in specified position
 	public Employee readRecords(long byteToStart) {
 		Employee thisEmp = null;
-		RandomAccessEmployeeRecord record = new RandomAccessEmployeeRecord();
 
 		try {// try to read file and get record
 			input.seek(byteToStart);// Look for proper position in file
@@ -232,7 +225,7 @@ public class RandomFile {
 
 	// Check if PPS Number already in use
 	public boolean isPpsExist(String pps, long currentByteStart) {
-		RandomAccessEmployeeRecord record = new RandomAccessEmployeeRecord();
+
 		boolean ppsExist = false;
 		long oldByteStart = currentByteStart;
 		long currentByte = 0;
@@ -264,7 +257,6 @@ public class RandomFile {
 	public boolean isSomeoneToDisplay() {
 		boolean someoneToDisplay = false;
 		long currentByte = 0;
-		RandomAccessEmployeeRecord record = new RandomAccessEmployeeRecord();
 
 		try {// try to read from file and look for ID
 			// Start from start of file and loop until valid ID is found or search returned to start position

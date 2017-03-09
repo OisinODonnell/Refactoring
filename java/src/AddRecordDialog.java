@@ -12,7 +12,6 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -22,20 +21,24 @@ import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
-public class AddRecordDialog extends Dialog implements ActionListener {
+import static java.awt.Color.WHITE;
+
+public class AddRecordDialog extends Dialog implements ActionListener, Constants {
+
+    ApplicationPresenter appPresenter = new ApplicationPresenter();
 
 
 	public AddRecordDialog(ApplicationView parent) {
-		setTitle("Add Record");
-		setModal(true);
-		this.parent = parent;
-		this.parent.setEnabled(false);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		
-		JScrollPane scrollPane = new JScrollPane(dialogPane());
+        setTitle("Add Record");
+        setModal(true);
+        this.parent = parent;
+        this.parent.setEnabled(false);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JScrollPane scrollPane = new JScrollPane(createDialogPane());
 		setContentPane(scrollPane);
 		
-		getRootPane().setDefaultButton(save);
+		getRootPane().setDefaultButton(saveBtn);
 		
 		setSize(ADD_WIDTH,ADD_HEIGHT);
 		setLocation(X_POS, Y_POS);
@@ -43,65 +46,41 @@ public class AddRecordDialog extends Dialog implements ActionListener {
 	}
 
 
-	public Container dialogPane() {
+    public JPanel setFontsAndListeners(JPanel empDetails)
+    {
+        JTextField field;
+        // loop through all panel components and add fonts and listeners
+        for (int i = 0; i < empDetails.getComponentCount(); i++) {
+            empDetails.getComponent(i).setFont(FONT1);
+            if (empDetails.getComponent(i) instanceof JComboBox) {
+                empDetails.getComponent(i).setBackground(WHITE);
+
+            }
+            else if(empDetails.getComponent(i) instanceof JTextField){
+                field = (JTextField) empDetails.getComponent(i);
+                if(field == parent.ppsField)
+                    field.setDocument(new JTextFieldLimit(9));
+                else
+                    field.setDocument(new JTextFieldLimit(COLUMNS));
+            }
+        }
+        return empDetails;
+    }
+
+	public Container createDialogPane() {
+
 		JPanel empDetails, buttonPanel;
 		empDetails = new JPanel(new MigLayout());
 		buttonPanel = new JPanel();
-		JTextField field;
 
-		empDetails.setBorder(BorderFactory.createTitledBorder("Employee Details"));
+        buttonPanel = appPresenter.createButtonPanel(buttonPanel, parent );
+        empDetails = appPresenter.buildEmpDetails(empDetails, buttonPanel, parent);
+        empDetails = setFontsAndListeners(empDetails);
 
-		empDetails.add(new JLabel(EMP_ID), LABEL_CONSTRAINTS);
-		empDetails.add(idField = new JTextField(COLUMNS), FIELD_CONSTRAINTS);
-		idField.setEditable(false);
-		
-
-		empDetails.add(new JLabel(EMP_PPS), LABEL_CONSTRAINTS);
-		empDetails.add(ppsField = new JTextField(COLUMNS), FIELD_CONSTRAINTS);
-
-		empDetails.add(new JLabel(EMP_SNAME), LABEL_CONSTRAINTS);
-		empDetails.add(surnameField = new JTextField(COLUMNS), FIELD_CONSTRAINTS);
-
-		empDetails.add(new JLabel(EMP_FNAME), LABEL_CONSTRAINTS);
-		empDetails.add(firstNameField = new JTextField(COLUMNS), FIELD_CONSTRAINTS);
-
-		empDetails.add(new JLabel(EMP_GEN), LABEL_CONSTRAINTS);
-		empDetails.add(genderCombo = new JComboBox<String>(this.parent.gender), FIELD_CONSTRAINTS);
-
-		empDetails.add(new JLabel(EMP_DEP), LABEL_CONSTRAINTS);
-		empDetails.add(departmentCombo = new JComboBox<String>(this.parent.department), FIELD_CONSTRAINTS);
-
-		empDetails.add(new JLabel(EMP_SAL), LABEL_CONSTRAINTS);
-		empDetails.add(salaryField = new JTextField(COLUMNS), FIELD_CONSTRAINTS);
-
-		empDetails.add(new JLabel(EMP_FULL), LABEL_CONSTRAINTS);
-		empDetails.add(fullTimeCombo = new JComboBox<String>(this.parent.fullTime), FIELD_CONSTRAINTS);
-
-		buttonPanel.add(save = new JButton("Save"));
-		save.addActionListener(this);
-		save.requestFocus();
-		buttonPanel.add(cancel = new JButton("Cancel"));
-		cancel.addActionListener(this);
-
-		empDetails.add(buttonPanel, "span 2,"+FIELD_CONSTRAINTS);
-
-		// loop through all panel components and add fonts and listeners
-		for (int i = 0; i < empDetails.getComponentCount(); i++) {
-			empDetails.getComponent(i).setFont(FONT1);
-			if (empDetails.getComponent(i) instanceof JComboBox) {
-				empDetails.getComponent(i).setBackground(Color.WHITE);
-			}// end if
-			else if(empDetails.getComponent(i) instanceof JTextField){
-				field = (JTextField) empDetails.getComponent(i);
-				if(field == ppsField)
-					field.setDocument(new JTextFieldLimit(9));
-				else
-				field.setDocument(new JTextFieldLimit(COLUMNS));
-			}// end else if
-		}// end for
-		idField.setText(Integer.toString(this.parent.getNextFreeId()));
 		return empDetails;
 	}
+
+
 
 
 	public void addRecord() {
@@ -111,9 +90,10 @@ public class AddRecordDialog extends Dialog implements ActionListener {
 		if (((String) fullTimeCombo.getSelectedItem()).equalsIgnoreCase("Yes"))
 			fullTime = true;
 		// create new Employee record with details from text fields
-		theEmployee = new Employee(Integer.parseInt(idField.getText()), ppsField.getText().toUpperCase(), surnameField.getText().toUpperCase(),
-				firstNameField.getText().toUpperCase(), genderCombo.getSelectedItem().toString().charAt(0),
-				departmentCombo.getSelectedItem().toString(), Double.parseDouble(salaryField.getText()), fullTime);
+		theEmployee = new Employee(Integer.parseInt(parent.idField.getText()),
+                parent.ppsField.getText().toUpperCase(), parent.surnameField.getText().toUpperCase(),
+				parent.firstNameField.getText().toUpperCase(), genderCombo.getSelectedItem().toString().charAt(0),
+				departmentCombo.getSelectedItem().toString(), Double.parseDouble(parent.salaryField.getText()), fullTime);
 		this.parent.currentEmployee = theEmployee;
 		this.parent.addRecord(theEmployee);
 		this.parent.displayRecords(theEmployee);
@@ -123,20 +103,20 @@ public class AddRecordDialog extends Dialog implements ActionListener {
 	public boolean checkInput() {
 		boolean valid = true;
 		// if any of inputs are in wrong format, colour text field and display message
-		if (ppsField.getText().equals("")) {
-			ppsField.setBackground(PINK);
+		if (parent.ppsField.getText().equals("")) {
+			parent.ppsField.setBackground(PINK);
 			valid = false;
 		}// end if
-		if (this.parent.correctPps(this.ppsField.getText().trim(), -1)) {
-			ppsField.setBackground(PINK);
+		if (this.parent.correctPps(parent.ppsField.getText().trim(), -1)) {
+			parent.ppsField.setBackground(PINK);
 			valid = false;
 		}// end if
-		if (surnameField.getText().isEmpty()) {
-			surnameField.setBackground(PINK);
+		if (parent.surnameField.getText().isEmpty()) {
+			parent.surnameField.setBackground(PINK);
 			valid = false;
 		}// end if
-		if (firstNameField.getText().isEmpty()) {
-			firstNameField.setBackground(PINK);
+		if (parent.firstNameField.getText().isEmpty()) {
+			parent.firstNameField.setBackground(PINK);
 			valid = false;
 		}// end if
 		if (genderCombo.getSelectedIndex() == 0) {
@@ -148,15 +128,15 @@ public class AddRecordDialog extends Dialog implements ActionListener {
 			valid = false;
 		}// end if
 		try {// try to get values from text field
-			Double.parseDouble(salaryField.getText());
+			Double.parseDouble(parent.salaryField.getText());
 			// check if salary is greater than 0
-			if (Double.parseDouble(salaryField.getText()) < 0) {
-				salaryField.setBackground(PINK);
+			if (Double.parseDouble(parent.salaryField.getText()) < 0) {
+				parent.salaryField.setBackground(PINK);
 				valid = false;
 			}// end if
 		}// end try
 		catch (NumberFormatException num) {
-			salaryField.setBackground(PINK);
+			parent.salaryField.setBackground(PINK);
 			valid = false;
 		}// end catch
 		if (fullTimeCombo.getSelectedIndex() == 0) {
@@ -168,19 +148,19 @@ public class AddRecordDialog extends Dialog implements ActionListener {
 
 	// set text field to white colour
 	public void setToWhite() {
-		ppsField.setBackground(Color.WHITE);
-		surnameField.setBackground(Color.WHITE);
-		firstNameField.setBackground(Color.WHITE);
-		salaryField.setBackground(Color.WHITE);
-		genderCombo.setBackground(Color.WHITE);
-		departmentCombo.setBackground(Color.WHITE);
-		fullTimeCombo.setBackground(Color.WHITE);
+		parent.ppsField.setBackground(WHITE);
+		parent.surnameField.setBackground(WHITE);
+		parent.firstNameField.setBackground(WHITE);
+		parent.salaryField.setBackground(WHITE);
+		genderCombo.setBackground(WHITE);
+		departmentCombo.setBackground(WHITE);
+		fullTimeCombo.setBackground(WHITE);
 	}// end setToWhite
 
 	// action performed
 	public void actionPerformed(ActionEvent e) {
 		// if chosen option save, save record to file
-		if (e.getSource() == save) {
+		if (e.getSource() == saveBtn) {
 			// if inputs correct, save record
 			if (checkInput()) {
 				addRecord();// add record to file

@@ -5,10 +5,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-public class ApplicationPresenter implements Presenter {
+public class ApplicationPresenter implements Presenter, Constants {
 
     private View view;
-
 
     @Override
     public void setView(View view) {
@@ -98,7 +97,7 @@ public class ApplicationPresenter implements Presenter {
     }
 
 
-    public JMenuBar menuBar(ApplicationView context, ApplicationPresenter domain) {
+    public JMenuBar createMenuBar(ApplicationView context, ApplicationPresenter domain) {
         JMenuBar menuBar = new JMenuBar();
 
         JMenu fileMenu = domain.createFileMenu(context);
@@ -112,9 +111,9 @@ public class ApplicationPresenter implements Presenter {
         menuBar.add(closeMenu);
 
         return menuBar;
-    }// end menuBar
+    }
 
-    public JPanel buttonPanel(ApplicationView context) {
+    public JPanel createButtonPanel(ApplicationView context) {
         JPanel buttonPanel = new JPanel();
 
         buttonPanel.add(context.add = new JButton("Add Record"), "growx, pushx");
@@ -132,8 +131,8 @@ public class ApplicationPresenter implements Presenter {
 
         return buttonPanel;
     }
-    // initialize search panel
-    public JPanel searchPanel(ApplicationView context) {
+
+    public JPanel createSearchPanel(ApplicationView context) {
         JPanel searchPanel = new JPanel(new MigLayout());
 
         searchPanel.setBorder(BorderFactory.createTitledBorder("Search"));
@@ -162,10 +161,9 @@ public class ApplicationPresenter implements Presenter {
         context.searchSurname.setToolTipText("Search Employee By Surname");
 
         return searchPanel;
-    }// end searchPanel
+    }
 
-    // initialize navigation panel
-    public JPanel navigPanel(ApplicationView context) {
+    public JPanel createNavigPanel(ApplicationView context) {
         JPanel navigPanel = new JPanel();
 
         navigPanel.setBorder(BorderFactory.createTitledBorder("Navigate"));
@@ -200,64 +198,32 @@ public class ApplicationPresenter implements Presenter {
 
 
         return navigPanel;
-    }// end naviPanel
+    }
 
     // initialize main/details panel
-    public JPanel detailsPanel(ApplicationView context) {
+    public JPanel createDetailsPanel(ApplicationView context) {
         JPanel empDetails = new JPanel(new MigLayout());
         JPanel buttonPanel = new JPanel();
         JTextField field;
 
+        buttonPanel = createButtonPanel(buttonPanel, context);
+        empDetails = buildEmpDetails(empDetails, buttonPanel, context);
+
         empDetails.setBorder(BorderFactory.createTitledBorder("Employee Details"));
-
-        empDetails.add(new JLabel("ID:"), "growx, pushx");
-        empDetails.add(context.idField = new JTextField(20), "growx, pushx, wrap");
-        context.idField.setEditable(false);
-
-        empDetails.add(new JLabel("PPS Number:"), "growx, pushx");
-        empDetails.add(context.ppsField = new JTextField(20), "growx, pushx, wrap");
-
-        empDetails.add(new JLabel("Surname:"), "growx, pushx");
-        empDetails.add(context.surnameField = new JTextField(20), "growx, pushx, wrap");
-
-        empDetails.add(new JLabel("First Name:"), "growx, pushx");
-        empDetails.add(context.firstNameField = new JTextField(20), "growx, pushx, wrap");
-
-        empDetails.add(new JLabel("Gender:"), "growx, pushx");
-        empDetails.add(context.genderCombo = new JComboBox<String>(context.gender), "growx, pushx, wrap");
-
-        empDetails.add(new JLabel("Department:"), "growx, pushx");
-        empDetails.add(context.departmentCombo = new JComboBox<String>(context.department), "growx, pushx, wrap");
-
-        empDetails.add(new JLabel("Salary:"), "growx, pushx");
-        empDetails.add(context.salaryField = new JTextField(20), "growx, pushx, wrap");
-
-        empDetails.add(new JLabel("Full Time:"), "growx, pushx");
-        empDetails.add(context.fullTimeCombo = new JComboBox<String>(context.fullTime), "growx, pushx, wrap");
-
-        buttonPanel.add(context.saveChange = new JButton("Save"));
-        context.saveChange.addActionListener(context);
-        context.saveChange.setVisible(false);
-        context.saveChange.setToolTipText("Save changes");
-        buttonPanel.add(context.cancelChange = new JButton("Cancel"));
-        context.cancelChange.addActionListener(context);
-        context.cancelChange.setVisible(false);
-        context.cancelChange.setToolTipText("Cancel edit");
-
-        empDetails.add(buttonPanel, "span 2,growx, pushx,wrap");
+        //empDetails.add(buttonPanel, "span 2,"+FIELD_CONSTRAINTS);
 
         // loop through panel components and add listeners and format
         for (int i = 0; i < empDetails.getComponentCount(); i++) {
-            empDetails.getComponent(i).setFont(context.font1);
+            empDetails.getComponent(i).setFont(FONT1);
             if (empDetails.getComponent(i) instanceof JTextField) {
                 field = (JTextField) empDetails.getComponent(i);
                 field.setEditable(false);
                 if (field == context.ppsField)
                     field.setDocument(new JTextFieldLimit(9));
                 else
-                    field.setDocument(new JTextFieldLimit(20));
+                    field.setDocument(new JTextFieldLimit(COLUMNS));
                 field.getDocument().addDocumentListener(context);
-            } // end if
+            }
             else if (empDetails.getComponent(i) instanceof JComboBox) {
                 empDetails.getComponent(i).setBackground(Color.WHITE);
                 empDetails.getComponent(i).setEnabled(false);
@@ -269,8 +235,63 @@ public class ApplicationPresenter implements Presenter {
                         super.paint(g);
                     }// end paint
                 });
-            } // end else if
-        } // end for
+            }
+        }
         return empDetails;
-    }// end detailsPanel
+    }
+    public JPanel buildEmpDetails(JPanel empDetails, JPanel buttonPanel, ApplicationView context)
+    {
+        empDetails.setBorder(BorderFactory.createTitledBorder("Employee Details"));
+
+        empDetails.add(new JLabel(EMP_ID), LABEL_CONSTRAINTS);
+        empDetails.add(context.idField = new JTextField(COLUMNS), FIELD_CONSTRAINTS);
+        context.idField.setEditable(false);
+
+        empDetails.add(new JLabel(EMP_PPS), LABEL_CONSTRAINTS);
+        empDetails.add(context.ppsField = new JTextField(COLUMNS), FIELD_CONSTRAINTS);
+
+        empDetails.add(new JLabel(EMP_SNAME), LABEL_CONSTRAINTS);
+        empDetails.add(context.surnameField = new JTextField(COLUMNS), FIELD_CONSTRAINTS);
+
+
+        empDetails.add(new JLabel(EMP_FNAME), LABEL_CONSTRAINTS);
+        empDetails.add(context.firstNameField = new JTextField(COLUMNS), FIELD_CONSTRAINTS);
+
+        empDetails.add(new JLabel(EMP_GEN), LABEL_CONSTRAINTS);
+        empDetails.add(context.genderCombo = new JComboBox<String>(context.gender), FIELD_CONSTRAINTS);
+
+        empDetails.add(new JLabel(EMP_DEP), LABEL_CONSTRAINTS);
+        empDetails.add(context.departmentCombo = new JComboBox<String>(context.department), FIELD_CONSTRAINTS);
+
+        empDetails.add(new JLabel(EMP_SAL), LABEL_CONSTRAINTS);
+        empDetails.add(context.salaryField = new JTextField(COLUMNS), FIELD_CONSTRAINTS);
+
+        empDetails.add(new JLabel(EMP_FULL), LABEL_CONSTRAINTS);
+        empDetails.add(context.fullTimeCombo = new JComboBox<String>(context.fullTime), FIELD_CONSTRAINTS);
+
+        empDetails.add(buttonPanel, "span 2,"+FIELD_CONSTRAINTS);
+        context.idField.setText(Integer.toString(context.getNextFreeId()));
+
+        return empDetails;
+    }
+    public JPanel createButtonPanel(JPanel buttonPanel, ApplicationView context) {
+
+//        buttonPanel.add(context.saveBtn = new JButton("Save"));
+//        context.saveBtn.addActionListener(context);
+//        context.saveBtn.requestFocus();
+//        buttonPanel.add(context.cancel = new JButton("Cancel"));
+//        context.cancel.addActionListener(context);
+
+
+        buttonPanel.add(context.saveChange = new JButton("Save"));
+        context.saveChange.addActionListener(context);
+        context.saveChange.setVisible(false);
+        context.saveChange.setToolTipText("Save changes");
+        buttonPanel.add(context.cancelChange = new JButton("Cancel"));
+        context.cancelChange.addActionListener(context);
+        context.cancelChange.setVisible(false);
+        context.cancelChange.setToolTipText("Cancel edit");
+
+        return buttonPanel;
+    }
 }
