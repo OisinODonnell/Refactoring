@@ -49,4 +49,7 @@ public interface Constants {
 
     String[] headers = { EMP_ID, EMP_PPS, EMP_SNAME, EMP_FNAME, EMP_GEN, EMP_DEP, EMP_SAL, EMP_FULL};
 
+    // column widths
+    int[] colWidth = { 15, 100, 120, 120, 50, 120, 80, 80 };
+
 }

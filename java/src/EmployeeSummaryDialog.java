@@ -15,7 +15,6 @@ import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,7 +26,7 @@ import javax.swing.table.DefaultTableModel;
 import net.miginfocom.swing.MigLayout;
 
 public class EmployeeSummaryDialog extends Dialog implements ActionListener {
-	// vector with all Employees details
+
 	Vector<Object> allEmployees;
 	JButton back;
 	
@@ -38,7 +37,7 @@ public class EmployeeSummaryDialog extends Dialog implements ActionListener {
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-		JScrollPane scrollPane = new JScrollPane(summaryPane());
+		JScrollPane scrollPane = new JScrollPane(createSummaryPane());
 		setContentPane(scrollPane);
 
 		setSize(EMP_WIDTH,EMP_HEIGHT);
@@ -46,8 +45,8 @@ public class EmployeeSummaryDialog extends Dialog implements ActionListener {
 		setVisible(true);
 
 	}
-	// initialise container
-	public Container summaryPane() {
+
+	public Container createSummaryPane() {
 		JPanel summaryDialog = new JPanel(new MigLayout());
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		JTable employeeTable;
@@ -57,15 +56,11 @@ public class EmployeeSummaryDialog extends Dialog implements ActionListener {
 		// column left alignment 
 		DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
 		Vector<String> header = new Vector<String>();
-		// header names
-		String[] headerName = { EMP_ID, EMP_PPS, EMP_SNAME, EMP_FNAME, EMP_GEN, EMP_DEP, EMP_SAL, EMP_FULL};
-		// column widths
-		int[] colWidth = { 15, 100, 120, 120, 50, 120, 80, 80 };
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		leftRenderer.setHorizontalAlignment(JLabel.LEFT);
 		// add headers
-		for (int i = 0; i < headerName.length; i++) {
-			header.addElement(headerName[i]);
+		for (int i = 0; i < headers.length; i++) {
+			header.addElement(headers[i]);
 		}
 		// construnct table and choose table model for each column
 		tableModel = new DefaultTableModel(this.allEmployees, header) {
@@ -88,7 +83,7 @@ public class EmployeeSummaryDialog extends Dialog implements ActionListener {
 		employeeTable = new JTable(tableModel);
 		// add header names to table
 		for (int i = 0; i < employeeTable.getColumnCount(); i++) {
-			employeeTable.getColumn(headerName[i]).setMinWidth(colWidth[i]);
+			employeeTable.getColumn(headers[i]).setMinWidth(colWidth[i]);
 		}
 		// set alignments
 		employeeTable.getColumnModel().getColumn(0).setCellRenderer(leftRenderer);
