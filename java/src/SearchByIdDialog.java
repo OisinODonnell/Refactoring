@@ -27,7 +27,7 @@ public class SearchByIdDialog extends Dialog implements ActionListener {
 	JTextField searchField;
 	// constructor for SearchByIdDialog 
 	public SearchByIdDialog(ApplicationView parent) {
-		setTitle("Search by Surname");
+		setTitle("Search by Id");
 		setModal(true);
 		this.parent = parent;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
