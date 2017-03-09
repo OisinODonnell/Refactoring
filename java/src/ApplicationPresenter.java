@@ -5,87 +5,21 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-/**
- * Created by Oisin on 3/9/2017.
- */
 public class ApplicationPresenter implements Presenter {
 
     private View view;
 
+
     @Override
     public void setView(View view) {
         this.view = view;
-
     }
 
     private View getView() {
-        if(view == null) {
+        if (view == null) {
             throw new IllegalStateException("The view is not set");
         }
         return view;
-    }
-
-
-    public JMenuItem createJMenuItem(String title, int key, int event) {
-        JMenuItem newItem = new JMenuItem();
-        newItem.setText(title);
-        newItem.setMnemonic(key);
-        newItem.setAccelerator(KeyStroke.getKeyStroke(key,event));
-
-        return newItem;
-    }
-
-    public JMenuItem createJMenuItem(String title) {
-        JMenuItem newItem = new JMenuItem();
-        newItem.setText(title);
-        return newItem;
-    }
-
-    public JMenu createRecordMenu(ApplicationView context) {
-        JMenu recordMenu  = new JMenu("Records");
-        recordMenu.setMnemonic(KeyEvent.VK_R);
-
-        context.create = createJMenuItem("Create new Record", KeyEvent.VK_N, ActionEvent.CTRL_MASK);
-        context.modify = createJMenuItem("Modify Record", KeyEvent.VK_E, ActionEvent.CTRL_MASK);
-        context.delete = createJMenuItem("Delete Record");
-
-        recordMenu.add(context.create).addActionListener(context);
-        recordMenu.add(context.modify).addActionListener(context);
-        recordMenu.add(context.delete).addActionListener(context);
-
-        return recordMenu;
-
-    }
-
-    public JMenu createNavigateMenu(ApplicationView context) {
-        JMenu navigateMenu = new JMenu("Navigate");
-        navigateMenu.setMnemonic(KeyEvent.VK_N);
-
-        context.firstItem = createJMenuItem("First");
-        context.prevItem = createJMenuItem("Previous");
-        context.nextItem = createJMenuItem("Next");
-        context.lastItem = createJMenuItem("Last");
-        context.searchById = createJMenuItem("Search by ID");
-        context.searchBySurname = createJMenuItem("Search by Surname");
-
-        navigateMenu.add(context.firstItem).addActionListener(context);
-        navigateMenu.add(context.prevItem).addActionListener(context);
-        navigateMenu.add(context.nextItem).addActionListener(context);
-        navigateMenu.add(context.lastItem).addActionListener(context);
-        navigateMenu.add(context.searchById).addActionListener(context);
-        navigateMenu.add(context.searchBySurname).addActionListener(context);
-
-        return navigateMenu;
-    }
-
-    public JMenu createCloseMenu(ApplicationView context) {
-        JMenu closeMenu = new JMenu("Exit");
-        closeMenu.setMnemonic(KeyEvent.VK_E);
-
-        context.closeApp = createJMenuItem("Close", KeyEvent.VK_F4, ActionEvent.CTRL_MASK);
-        closeMenu.add(context.closeApp).addActionListener(context);
-
-        return closeMenu;
     }
 
     public JMenu createFileMenu(ApplicationView context) {
@@ -102,14 +36,75 @@ public class ApplicationPresenter implements Presenter {
 
         return fileMenu;
     }
+
+    public JMenuItem createJMenuItem(String title, int key, int event) {
+        JMenuItem newItem = new JMenuItem();
+        newItem.setText(title);
+        newItem.setMnemonic(key);
+        newItem.setAccelerator(KeyStroke.getKeyStroke(key,event));
+
+        return newItem;
+    }
+    public JMenuItem createJMenuItem(String title) {
+        JMenuItem newItem = new JMenuItem();
+        newItem.setText(title);
+        return newItem;
+    }
+    public JMenu createRecordMenu(ApplicationView context) {
+        JMenu recordMenu = new JMenu("Records");
+        recordMenu.setMnemonic(KeyEvent.VK_R);
+
+        context.create = createJMenuItem("Create new Record", KeyEvent.VK_N, ActionEvent.CTRL_MASK);
+        context.modify = createJMenuItem("Modify Record", KeyEvent.VK_E, ActionEvent.CTRL_MASK);
+        context.delete = createJMenuItem("Delete Record");
+
+        recordMenu.add(context.create).addActionListener(context);
+        recordMenu.add(context.modify).addActionListener(context);
+        recordMenu.add(context.delete).addActionListener(context);
+
+        return recordMenu;
+    }
+
+    public JMenu createNavigateMenu(ApplicationView context) {
+        JMenu navigateMenu = new JMenu("Navigate");
+        navigateMenu.setMnemonic(KeyEvent.VK_N);
+
+        context.firstItem = createJMenuItem("First");
+        context.prevItem = createJMenuItem("Previous");
+        context.nextItem = createJMenuItem("Next");
+        context.lastItem = createJMenuItem("Last");
+        context.searchById      = createJMenuItem("Search by ID");
+        context.searchBySurname = createJMenuItem("Search by Surname");
+
+        navigateMenu.add(context.firstItem      ).addActionListener(context);
+        navigateMenu.add(context.prevItem       ).addActionListener(context);
+        navigateMenu.add(context.nextItem       ).addActionListener(context);
+        navigateMenu.add(context.lastItem       ).addActionListener(context);
+        navigateMenu.add(context.searchById     ).addActionListener(context);
+        navigateMenu.add(context.searchBySurname).addActionListener(context);
+
+        return navigateMenu;
+    }
+
+    public JMenu createCloseMenu(ApplicationView context) {
+        JMenu closeMenu = new JMenu("Exit");
+        closeMenu.setMnemonic(KeyEvent.VK_E);
+
+        context.closeApp = createJMenuItem("Close", KeyEvent.VK_F4, ActionEvent.CTRL_MASK);
+        closeMenu.add(context.closeApp).addActionListener(context);
+
+        return closeMenu;
+
+    }
+
+
     public JMenuBar menuBar(ApplicationView context, ApplicationPresenter domain) {
         JMenuBar menuBar = new JMenuBar();
-        JMenu fileMenu, recordMenu, navigateMenu, closeMenu;
 
-        fileMenu = createFileMenu(context);
-        recordMenu = createRecordMenu(context);
-        navigateMenu = createNavigateMenu(context);
-        closeMenu = createCloseMenu(context);
+        JMenu fileMenu = domain.createFileMenu(context);
+        JMenu recordMenu = domain.createRecordMenu(context);
+        JMenu navigateMenu = domain.createNavigateMenu(context);
+        JMenu closeMenu = domain.createCloseMenu(context);
 
         menuBar.add(fileMenu);
         menuBar.add(recordMenu);
@@ -117,68 +112,9 @@ public class ApplicationPresenter implements Presenter {
         menuBar.add(closeMenu);
 
         return menuBar;
-    }
+    }// end menuBar
 
-    public JPanel searchPanel(ApplicationView context, ApplicationPresenter domain) {
-        JPanel searchPanel = new JPanel(new MigLayout());
-
-        searchPanel.setBorder(BorderFactory.createTitledBorder("Search"));
-        searchPanel.add(new JLabel("Search by ID:"), "growx, pushx");
-        searchPanel.add(context.searchByIdField = new JTextField(20), "width 200:200:200, growx, pushx");
-        context.searchByIdField.addActionListener(context);
-        context.searchByIdField.setDocument(new JTextFieldLimit(20));
-        searchPanel.add(context.searchId = new JButton(new ImageIcon(
-                        new ImageIcon("imgres.png").getImage().getScaledInstance(35, 20, java.awt.Image.SCALE_SMOOTH))),
-                "width 35:35:35, height 20:20:20, growx, pushx, wrap");
-        context.searchId.addActionListener(context);
-        context.searchId.setToolTipText("Search Employee By ID");
-
-        searchPanel.add(new JLabel("Search by Surname:"), "growx, pushx");
-        searchPanel.add(context.searchBySurnameField = new JTextField(20), "width 200:200:200, growx, pushx");
-        context.searchBySurnameField.addActionListener(context);
-        context.searchBySurnameField.setDocument(new JTextFieldLimit(20));
-        searchPanel.add(
-                context.searchSurname = new JButton(new ImageIcon(new ImageIcon("imgres.png").getImage()
-                        .getScaledInstance(35, 20, java.awt.Image.SCALE_SMOOTH))),
-                "width 35:35:35, height 20:20:20, growx, pushx, wrap");
-        context.searchSurname.addActionListener(context);
-        context.searchSurname.setToolTipText("Search Employee By Surname");
-
-        return searchPanel;
-    }
-
-    public JPanel navigPanel(ApplicationView context, ApplicationPresenter domain) {
-        JPanel navigPanel = new JPanel();
-
-        navigPanel.setBorder(BorderFactory.createTitledBorder("Navigate"));
-        navigPanel.add(context.first = new JButton(new ImageIcon(
-                new ImageIcon("first.png").getImage().getScaledInstance(17, 17, java.awt.Image.SCALE_SMOOTH))));
-        context.first.setPreferredSize(new Dimension(17, 17));
-        context.first.addActionListener(context);
-        context.first.setToolTipText("Display first Record");
-
-        navigPanel.add(context.previous = new JButton(new ImageIcon(new ImageIcon("previous.png").getImage()
-                .getScaledInstance(17, 17, java.awt.Image.SCALE_SMOOTH))));
-        context.previous.setPreferredSize(new Dimension(17, 17));
-        context.previous.addActionListener(context);
-        context.previous.setToolTipText("Display next Record");
-
-        navigPanel.add(context.next = new JButton(new ImageIcon(
-                new ImageIcon("next.png").getImage().getScaledInstance(17, 17, java.awt.Image.SCALE_SMOOTH))));
-        context.next.setPreferredSize(new Dimension(17, 17));
-        context.next.addActionListener(context);
-        context.next.setToolTipText("Display previous Record");
-
-        navigPanel.add(context.last = new JButton(new ImageIcon(
-                new ImageIcon("last.png").getImage().getScaledInstance(17, 17, java.awt.Image.SCALE_SMOOTH))));
-        context.last.setPreferredSize(new Dimension(17, 17));
-        context.last.addActionListener(context);
-        context.last.setToolTipText("Display last Record");
-
-        return navigPanel;
-    }
-
-    public JPanel buttonPanel(ApplicationView context, ApplicationPresenter domain) {
+    public JPanel buttonPanel(ApplicationView context) {
         JPanel buttonPanel = new JPanel();
 
         buttonPanel.add(context.add = new JButton("Add Record"), "growx, pushx");
@@ -196,8 +132,78 @@ public class ApplicationPresenter implements Presenter {
 
         return buttonPanel;
     }
+    // initialize search panel
+    public JPanel searchPanel(ApplicationView context) {
+        JPanel searchPanel = new JPanel(new MigLayout());
 
-    public JPanel detailsPanel(ApplicationView context, ApplicationPresenter domain) {
+        searchPanel.setBorder(BorderFactory.createTitledBorder("Search"));
+        searchPanel.add(new JLabel("Search by ID:"), "growx, pushx");
+        searchPanel.add(context.searchByIdField = new JTextField(20), "width 200:200:200, growx, pushx");
+        context.searchByIdField.addActionListener(context);
+        context.searchByIdField.setDocument(new JTextFieldLimit(20));
+        //context.searchByIdField.setText("Search by ID");
+
+        searchPanel.add(context.searchId = new JButton(new ImageIcon(
+                        new ImageIcon("imgres.png").getImage().getScaledInstance(35, 20, java.awt.Image.SCALE_SMOOTH))),
+                "width 35:35:35, height 20:20:20, growx, pushx, wrap");
+        context.searchId.addActionListener(context);
+        context.searchId.setToolTipText("Search Employee By ID");
+
+        searchPanel.add(new JLabel("Search by Surname:"), "growx, pushx");
+        searchPanel.add(context.searchBySurnameField = new JTextField(20), "width 200:200:200, growx, pushx");
+        context.searchBySurnameField.addActionListener(context);
+        context.searchBySurnameField.setDocument(new JTextFieldLimit(20));
+        // context.searchBySurnameField.setText("Search by Surname");
+        searchPanel.add(
+                context.searchSurname = new JButton(new ImageIcon(new ImageIcon("imgres.png").getImage()
+                        .getScaledInstance(35, 20, java.awt.Image.SCALE_SMOOTH))),
+                "width 35:35:35, height 20:20:20, growx, pushx, wrap");
+        context.searchSurname.addActionListener(context);
+        context.searchSurname.setToolTipText("Search Employee By Surname");
+
+        return searchPanel;
+    }// end searchPanel
+
+    // initialize navigation panel
+    public JPanel navigPanel(ApplicationView context) {
+        JPanel navigPanel = new JPanel();
+
+        navigPanel.setBorder(BorderFactory.createTitledBorder("Navigate"));
+        navigPanel.add(context.first = new JButton(new ImageIcon(
+                new ImageIcon("first.png").getImage().getScaledInstance(17, 17, java.awt.Image.SCALE_SMOOTH))));
+        context.first.setPreferredSize(new Dimension(17, 17));
+        context.first.addActionListener(context);
+        context.first.setToolTipText("Display first Record");
+        context.first.setText("First");
+
+        navigPanel.add(context.previous = new JButton(new ImageIcon(new ImageIcon("previous.png").getImage()
+                .getScaledInstance(17, 17, java.awt.Image.SCALE_SMOOTH))));
+        context.previous.setPreferredSize(new Dimension(17, 17));
+        context.previous.addActionListener(context);
+        context.previous.setToolTipText("Display next Record");
+        context.previous.setText("Previous");
+
+
+        navigPanel.add(context.next = new JButton(new ImageIcon(
+                new ImageIcon("next.png").getImage().getScaledInstance(17, 17, java.awt.Image.SCALE_SMOOTH))));
+        context.next.setPreferredSize(new Dimension(17, 17));
+        context.next.addActionListener(context);
+        context.next.setToolTipText("Display previous Record");
+        context.next.setText("Next");
+
+        navigPanel.add(context.last = new JButton(new ImageIcon(
+                new ImageIcon("last.png").getImage().getScaledInstance(17, 17, java.awt.Image.SCALE_SMOOTH))));
+        context.last.setPreferredSize(new Dimension(17, 17));
+        context.last.addActionListener(context);
+        context.last.setToolTipText("Display last Record");
+        context.last.setText("Last");
+
+
+        return navigPanel;
+    }// end naviPanel
+
+    // initialize main/details panel
+    public JPanel detailsPanel(ApplicationView context) {
         JPanel empDetails = new JPanel(new MigLayout());
         JPanel buttonPanel = new JPanel();
         JTextField field;
@@ -266,5 +272,5 @@ public class ApplicationPresenter implements Presenter {
             } // end else if
         } // end for
         return empDetails;
-    }
+    }// end detailsPanel
 }

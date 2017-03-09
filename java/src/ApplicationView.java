@@ -859,13 +859,13 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 
 		setJMenuBar(domain.menuBar(this, domain));// add menu bar to frame
 		// add search panel to frame
-		dialog.add(domain.searchPanel(this, domain), "width 400:400:400, growx, pushx");
+		dialog.add(domain.searchPanel(this), "width 400:400:400, growx, pushx");
 		// add navigation panel to frame
-		dialog.add(domain.navigPanel(this, domain), "width 150:150:150, wrap");
+		dialog.add(domain.navigPanel(this), "width 150:150:150, wrap");
 		// add button panel to frame
-		dialog.add(domain.buttonPanel(this, domain), "growx, pushx, span 2,wrap");
+		dialog.add(domain.buttonPanel(this), "growx, pushx, span 2,wrap");
 		// add details panel to frame
-		dialog.add(domain.detailsPanel(this, domain), "gap top 30, gap left 150, center");
+		dialog.add(domain.detailsPanel(this), "gap top 30, gap left 150, center");
 
 		JScrollPane scrollPane = new JScrollPane(dialog);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);

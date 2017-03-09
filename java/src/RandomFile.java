@@ -19,38 +19,56 @@ public class RandomFile {
 	public void createFile(String fileName) {
 		RandomAccessFile file = null;
 
-		try // open file for reading and writing
-		{
-			file = new RandomAccessFile(fileName, "rw");
+		file = openFile(fileName, "rw", "Error processing file!" );
 
+		if (file==null)
+			System.exit(1);
+		else
+			closeFile();
+
+	} // end createFile
+
+
+	public RandomAccessFile openFile(String fileName, String mode, String errMessage)
+	{
+		RandomAccessFile file = null;
+
+		try { // open file
+			file = new RandomAccessFile(fileName, mode);
 		} // end try
 		catch (IOException ioException) {
-			JOptionPane.showMessageDialog(null, "Error processing file!");
-			System.exit(1);
+			JOptionPane.showMessageDialog(null, errMessage);
 		} // end catch
 
-		finally {
-			try {
-				if (file != null)
-					file.close(); // close file
-			} // end try
-			catch (IOException ioException) {
-				JOptionPane.showMessageDialog(null, "Error closing file!");
-				System.exit(1);
-			} // end catch
-		} // end finally
-	} // end createFile
+		return file;
+	}
 
 	// Open file for adding or changing records
 	public void openWriteFile(String fileName) {
-		try // open file
+
+		output = openFile(fileName, "rw", "File does not exist!" );
+
+	} // end method openWriteFile
+
+	// Open file for reading
+	public void openReadFile(String fileName) {
+
+		input = openFile(fileName, "r", "File is not supported!");
+
+	} // end method openReadFile
+
+	// Close file for adding or changing records
+	public void closeFile() {
+		try // close file and exit
 		{
-			output = new RandomAccessFile(fileName, "rw");
+			if (output != null)
+				output.close();
 		} // end try
 		catch (IOException ioException) {
-			JOptionPane.showMessageDialog(null, "File does not exist!");
+			JOptionPane.showMessageDialog(null, "Error closing file!");
+			System.exit(1);
 		} // end catch
-	} // end method openFile
+	} // end closeFile
 
 	// Add records to file
 	public long addRecords(Employee employeeToAdd) {
@@ -75,11 +93,11 @@ public class RandomFile {
 		} // end catch
 
 		return currentRecordStart - RandomAccessEmployeeRecord.SIZE;// Return
-																	// position
-																	// where
-																	// object
-																	// starts in
-																	// the file
+		// position
+		// where
+		// object
+		// starts in
+		// the file
 	}// end addRecords
 
 	// Change details for existing object
@@ -121,29 +139,8 @@ public class RandomFile {
 		} // end catch
 	}// end deleteRecords
 
-	// Open file for reading
-	public void openReadFile(String fileName) {
-		try // open file
-		{
-			input = new RandomAccessFile(fileName, "r");
-		} // end try
-		catch (IOException ioException) {
-			JOptionPane.showMessageDialog(null, "File is not suported!");
-		} // end catch
-	} // end method openFile
 
-	// Close file
-	public void closeFile() {
-		try // close file and exit
-		{
-			if (input != null)
-				input.close();
-		} // end try
-		catch (IOException ioException) {
-			JOptionPane.showMessageDialog(null, "Error closing file!");
-			System.exit(1);
-		} // end catch
-	} // end method closeFile
+
 
 	// Get position of first record in file
 	public long getFirst() {
@@ -154,7 +151,7 @@ public class RandomFile {
 		} // end try
 		catch (IOException e) {
 		}// end catch
-		
+
 		return byteToStart;
 	}// end getFirst
 
@@ -164,8 +161,9 @@ public class RandomFile {
 
 		try {// try to get position of last record
 			byteToStart = input.length() - RandomAccessEmployeeRecord.SIZE;
-		}// end try 
+		}// end try
 		catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "IO Exception");
 		}// end catch
 
 		return byteToStart;
@@ -186,6 +184,7 @@ public class RandomFile {
 		catch (NumberFormatException e) {
 		} // end catch
 		catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "IO Exception");
 		}// end catch
 		return byteToStart;
 	}// end getFirst
@@ -203,8 +202,10 @@ public class RandomFile {
 				byteToStart = byteToStart - RandomAccessEmployeeRecord.SIZE;
 		} // end try
 		catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null, "Number Format Exception");
 		} // end catch
 		catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "IO Exception");
 		}// end catch
 		return byteToStart;
 	}// end getPrevious
@@ -219,8 +220,9 @@ public class RandomFile {
 			record.read(input);// Read record from file
 		} // end try
 		catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "IO Exception");
 		}// end catch
-		
+
 		thisEmp = record;
 
 		return thisEmp;
@@ -250,6 +252,7 @@ public class RandomFile {
 			}// end while
 		} // end try
 		catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "IO Exception");
 		}// end catch
 
 		return ppsExist;
@@ -273,6 +276,7 @@ public class RandomFile {
 			}// end while
 		}// end try
 		catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "IO Exception");
 		}// end catch
 
 		return someoneToDisplay;
