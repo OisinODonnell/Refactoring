@@ -798,8 +798,71 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 		randomFile.createFile(file.getName());
 	}// end createRandomFile
 
-	// action listener for buttons, text field and menu items
-	public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e){
+        String action = e.getActionCommand();
+        if (e.getSource() == searchId)              searchEmployeeById();
+        else if (e.getSource() == searchByIdField)  searchEmployeeById();
+        else if (e.getSource() == searchSurname)    searchEmployeeBySurname();
+        else if (e.getSource() == searchBySurnameField)   searchEmployeeBySurname();
+        else if (e.getSource() == cancelChange)      cancelChange();
+
+        if(checkInput() && !checkForChanges()) {
+
+            switch(action) {
+                case "Close App":
+                case "Close":
+                    exitApp();
+                    break;
+                case "Open":
+                    openFile();
+                    break;
+                case "Save":
+                case "Save As":
+                case "Save Change":
+                    saveFile();
+                    change = false;
+                    break;
+                case "Search by Surname":
+                    displaySearchBySurnameDialog();
+                    break;
+                case "First":
+                    firstRecord();
+                    displayRecords(currentEmployee);
+                    break;
+                case "Previous":
+                    previousRecord();
+                    displayRecords(currentEmployee);
+                    break;
+                case "Next":
+                    nextRecord();
+                    displayRecords(currentEmployee);
+                    break;
+                case "Last":
+                    lastRecord();
+                    displayRecords(currentEmployee);
+                    break;
+                case "List all Records":
+                    if(isSomeoneToDisplay()) displayEmployeeSummaryDialog();
+                    break;
+                case "Edit Record":
+                    editDetails();
+                    break;
+                case "Create new Record":
+                case "Add Record":
+                    new AddRecordDialog(ApplicationView.this);
+                    break;
+                case "Delete Record":
+                    deleteRecord();
+                    break;
+                case "Search by ID":
+                    new SearchByIdDialog(ApplicationView.this);
+                    break;
+            } // switch
+        }
+    }
+
+    // action listener for buttons, text field and menu items
+	    public void actionPerformed2(ActionEvent e) {
 
 		if (e.getSource() == closeApp) {
 			if (checkInput() && !checkForChanges())
