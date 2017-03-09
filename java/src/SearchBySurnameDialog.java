@@ -19,7 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
-public class SearchBySurnameDialog extends JDialog implements ActionListener{
+public class SearchBySurnameDialog extends Dialog implements ActionListener{
 	ApplicationView parent;
 	JButton search, cancel;
 	JTextField searchField;
@@ -35,8 +35,8 @@ public class SearchBySurnameDialog extends JDialog implements ActionListener{
 
 		getRootPane().setDefaultButton(search);
 		
-		setSize(500, 190);
-		setLocation(350, 250);
+		setSize(SEARCH_WIDTH, SEARCH_HEIGHT);
+		setLocation(X_POS, Y_POS);
 		setVisible(true);
 	}// end SearchBySurnameDialog
 	
@@ -51,10 +51,10 @@ public class SearchBySurnameDialog extends JDialog implements ActionListener{
 	
 		textPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		textPanel.add(searchLabel = new JLabel("Enter Surname:"));
-		searchLabel.setFont(this.parent.font1);
-		textPanel.add(searchField = new JTextField(20));
-		searchField.setFont(this.parent.font1);
-		searchField.setDocument(new JTextFieldLimit(20));
+		searchLabel.setFont(FONT1);
+		textPanel.add(searchField = new JTextField(COLUMNS));
+		searchField.setFont(FONT1);
+		searchField.setDocument(new JTextFieldLimit(COLUMNS));
 
 		buttonPanel.add(search = new JButton("Search"));
 		search.addActionListener(this);

@@ -26,7 +26,7 @@ import javax.swing.table.DefaultTableModel;
 
 import net.miginfocom.swing.MigLayout;
 
-public class EmployeeSummaryDialog extends JDialog implements ActionListener {
+public class EmployeeSummaryDialog extends Dialog implements ActionListener {
 	// vector with all Employees details
 	Vector<Object> allEmployees;
 	JButton back;
@@ -41,8 +41,8 @@ public class EmployeeSummaryDialog extends JDialog implements ActionListener {
 		JScrollPane scrollPane = new JScrollPane(summaryPane());
 		setContentPane(scrollPane);
 
-		setSize(850, 500);
-		setLocation(350, 250);
+		setSize(EMP_WIDTH,EMP_HEIGHT);
+		setLocation(X_POS, Y_POS);
 		setVisible(true);
 
 	}
@@ -58,8 +58,7 @@ public class EmployeeSummaryDialog extends JDialog implements ActionListener {
 		DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
 		Vector<String> header = new Vector<String>();
 		// header names
-		String[] headerName = { "ID", "PPS Number", "Surname", "First Name", "Gender", "Department", "Salary",
-				"Full Time" };
+		String[] headerName = { EMP_ID, EMP_PPS, EMP_SNAME, EMP_FNAME, EMP_GEN, EMP_DEP, EMP_SAL, EMP_FULL};
 		// column widths
 		int[] colWidth = { 15, 100, 120, 120, 50, 120, 80, 80 };
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -105,8 +104,8 @@ public class EmployeeSummaryDialog extends JDialog implements ActionListener {
 		back.addActionListener(this);
 		back.setToolTipText("Return to main screen");
 		
-		summaryDialog.add(buttonPanel,"growx, pushx, wrap");
-		summaryDialog.add(scrollPane,"growx, pushx, wrap");
+		summaryDialog.add(buttonPanel,FIELD_CONSTRAINTS);
+		summaryDialog.add(scrollPane,FIELD_CONSTRAINTS);
 		scrollPane.setBorder(BorderFactory.createTitledBorder("Employee Details"));
 		
 		return summaryDialog;
