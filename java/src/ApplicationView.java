@@ -153,9 +153,9 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
         if (isSomeoneToDisplay()) {
             randomFile.openReadFile(file.getAbsolutePath());
             // get byte start in file for first record
-            currentByteStart = randomFile.getFirst();
+            currentByteStart = randomFile.getFirstRecordPosition();
             // assign current Employee to first record in file
-            currentEmployee = randomFile.readRecords(currentByteStart);
+            currentEmployee = randomFile.readRecordAtPosition(currentByteStart);
             randomFile.closeFile();
             // if first record is inactive look for next record
             if (currentEmployee.getEmployeeId() == 0)
@@ -167,14 +167,14 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
         // if any active record in file look for first record
         if (isSomeoneToDisplay()) {
             randomFile.openReadFile(file.getAbsolutePath());
-            currentByteStart = randomFile.getPrevious(currentByteStart);
+            currentByteStart = randomFile.getPreviousRecordPosition(currentByteStart);
             // assign current Employee to previous record in file
-            currentEmployee = randomFile.readRecords(currentByteStart);
+            currentEmployee = randomFile.readRecordAtPosition(currentByteStart);
             // loop to previous record until Employee is active - ID is not 0
             while (currentEmployee.getEmployeeId() == 0) {
-                currentByteStart = randomFile.getPrevious(currentByteStart);
+                currentByteStart = randomFile.getPreviousRecordPosition(currentByteStart);
                 // assign current Employee to previous record in file
-                currentEmployee = randomFile.readRecords(currentByteStart);
+                currentEmployee = randomFile.readRecordAtPosition(currentByteStart);
             }
             randomFile.closeFile();
         }
@@ -185,15 +185,15 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
         if (isSomeoneToDisplay()) {
             randomFile.openReadFile(file.getAbsolutePath());
             // get byte start in file for next record
-            currentByteStart = randomFile.getNext(currentByteStart);
+            currentByteStart = randomFile.getNextRecordPosition(currentByteStart);
             // assign current Employee to record in file
-            currentEmployee = randomFile.readRecords(currentByteStart);
+            currentEmployee = randomFile.readRecordAtPosition(currentByteStart);
             // loop to previous next until Employee is active - ID is not 0
             while (currentEmployee.getEmployeeId() == 0) {
                 // get byte start in file for next record
-                currentByteStart = randomFile.getNext(currentByteStart);
+                currentByteStart = randomFile.getNextRecordPosition(currentByteStart);
                 // assign current Employee to next record in file
-                currentEmployee = randomFile.readRecords(currentByteStart);
+                currentEmployee = randomFile.readRecordAtPosition(currentByteStart);
             }
             randomFile.closeFile();
         }
@@ -204,9 +204,9 @@ public class ApplicationView extends JFrame implements Constants, View, ActionLi
         if (isSomeoneToDisplay()) {
             randomFile.openReadFile(file.getAbsolutePath());
             // get byte start in file for last record
-            currentByteStart = randomFile.getLast();
+            currentByteStart = randomFile.getLastRecordPosition();
             // assign current Employee to first record in file
-            currentEmployee = randomFile.readRecords(currentByteStart);
+            currentEmployee = randomFile.readRecordAtPosition(currentByteStart);
             randomFile.closeFile();
             // if last record is inactive look for previous record
             if (currentEmployee.getEmployeeId() == 0)
