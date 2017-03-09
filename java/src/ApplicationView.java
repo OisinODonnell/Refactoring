@@ -543,9 +543,9 @@ public class ApplicationView extends JFrame implements View, ActionListener, Ite
 			valid = false;
 		} // end if
 		try {// try to get values from text field
-			Double.parseDouble(salaryField.getText());
+			Double salary = Double.parseDouble(salaryField.getText());
 			// check if salary is greater than 0
-			if (Double.parseDouble(salaryField.getText()) < 0) {
+			if (salary < 0) {
 				salaryField.setBackground(PINK);
 				valid = false;
 			} // end if
