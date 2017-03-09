@@ -23,11 +23,16 @@ import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
 
 public class AddRecordDialog extends JDialog implements ActionListener {
+
 	JTextField idField, ppsField, surnameField, firstNameField, salaryField;
 	JComboBox<String> genderCombo, departmentCombo, fullTimeCombo;
 	JButton save, cancel;
 	ApplicationView parent;
-	// constructor for add record dialog
+
+	final String LABEL_CONSTRAINTS = "growx, pushx";
+	final String FIELD_CONSTRAINTS = "growx, pushx, wrap";
+	final int COLUMNS = 20;
+
 	public AddRecordDialog(ApplicationView parent) {
 		setTitle("Add Record");
 		setModal(true);
@@ -43,9 +48,9 @@ public class AddRecordDialog extends JDialog implements ActionListener {
 		setSize(500, 370);
 		setLocation(350, 250);
 		setVisible(true);
-	}// end AddRecordDialog
+	}
 
-	// initialize dialog container
+
 	public Container dialogPane() {
 		JPanel empDetails, buttonPanel;
 		empDetails = new JPanel(new MigLayout());
@@ -54,31 +59,31 @@ public class AddRecordDialog extends JDialog implements ActionListener {
 
 		empDetails.setBorder(BorderFactory.createTitledBorder("Employee Details"));
 
-		empDetails.add(new JLabel("ID:"), "growx, pushx");
-		empDetails.add(idField = new JTextField(20), "growx, pushx, wrap");
+		empDetails.add(new JLabel("ID:"), LABEL_CONSTRAINTS);
+		empDetails.add(idField = new JTextField(COLUMNS), FIELD_CONSTRAINTS);
 		idField.setEditable(false);
 		
 
-		empDetails.add(new JLabel("PPS Number:"), "growx, pushx");
-		empDetails.add(ppsField = new JTextField(20), "growx, pushx, wrap");
+		empDetails.add(new JLabel("PPS Number:"), LABEL_CONSTRAINTS);
+		empDetails.add(ppsField = new JTextField(COLUMNS), FIELD_CONSTRAINTS);
 
-		empDetails.add(new JLabel("Surname:"), "growx, pushx");
-		empDetails.add(surnameField = new JTextField(20), "growx, pushx, wrap");
+		empDetails.add(new JLabel("Surname:"), LABEL_CONSTRAINTS);
+		empDetails.add(surnameField = new JTextField(COLUMNS), FIELD_CONSTRAINTS);
 
-		empDetails.add(new JLabel("First Name:"), "growx, pushx");
-		empDetails.add(firstNameField = new JTextField(20), "growx, pushx, wrap");
+		empDetails.add(new JLabel("First Name:"), LABEL_CONSTRAINTS);
+		empDetails.add(firstNameField = new JTextField(COLUMNS), FIELD_CONSTRAINTS);
 
-		empDetails.add(new JLabel("Gender:"), "growx, pushx");
-		empDetails.add(genderCombo = new JComboBox<String>(this.parent.gender), "growx, pushx, wrap");
+		empDetails.add(new JLabel("Gender:"), LABEL_CONSTRAINTS);
+		empDetails.add(genderCombo = new JComboBox<String>(this.parent.gender), FIELD_CONSTRAINTS);
 
-		empDetails.add(new JLabel("Department:"), "growx, pushx");
-		empDetails.add(departmentCombo = new JComboBox<String>(this.parent.department), "growx, pushx, wrap");
+		empDetails.add(new JLabel("Department:"), LABEL_CONSTRAINTS);
+		empDetails.add(departmentCombo = new JComboBox<String>(this.parent.department), FIELD_CONSTRAINTS);
 
-		empDetails.add(new JLabel("Salary:"), "growx, pushx");
-		empDetails.add(salaryField = new JTextField(20), "growx, pushx, wrap");
+		empDetails.add(new JLabel("Salary:"), LABEL_CONSTRAINTS);
+		empDetails.add(salaryField = new JTextField(COLUMNS), FIELD_CONSTRAINTS);
 
-		empDetails.add(new JLabel("Full Time:"), "growx, pushx");
-		empDetails.add(fullTimeCombo = new JComboBox<String>(this.parent.fullTime), "growx, pushx, wrap");
+		empDetails.add(new JLabel("Full Time:"), LABEL_CONSTRAINTS);
+		empDetails.add(fullTimeCombo = new JComboBox<String>(this.parent.fullTime), FIELD_CONSTRAINTS);
 
 		buttonPanel.add(save = new JButton("Save"));
 		save.addActionListener(this);
@@ -86,7 +91,8 @@ public class AddRecordDialog extends JDialog implements ActionListener {
 		buttonPanel.add(cancel = new JButton("Cancel"));
 		cancel.addActionListener(this);
 
-		empDetails.add(buttonPanel, "span 2,growx, pushx,wrap");
+		empDetails.add(buttonPanel, "span 2,"+FIELD_CONSTRAINTS);
+
 		// loop through all panel components and add fonts and listeners
 		for (int i = 0; i < empDetails.getComponentCount(); i++) {
 			empDetails.getComponent(i).setFont(this.parent.font1);
@@ -98,14 +104,14 @@ public class AddRecordDialog extends JDialog implements ActionListener {
 				if(field == ppsField)
 					field.setDocument(new JTextFieldLimit(9));
 				else
-				field.setDocument(new JTextFieldLimit(20));
+				field.setDocument(new JTextFieldLimit(COLUMNS));
 			}// end else if
 		}// end for
 		idField.setText(Integer.toString(this.parent.getNextFreeId()));
 		return empDetails;
 	}
 
-	// add record to file
+
 	public void addRecord() {
 		boolean fullTime = false;
 		Employee theEmployee;
